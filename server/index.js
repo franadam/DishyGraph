@@ -8,11 +8,12 @@ const app = express();
 // Serve only the static files form the dist directory
 app.use(express.static(path.join(__dirname,'../client/dist/dishygraph')));
 
-app.get('/*', (req, res) =>
+app.get('*', (req, res) =>
   res.sendFile('index.html', {
     root: path.join(__dirname, '../client/dist/dishygraph'),
   })
 );
+console.log('path 2 :>> ');
 
 // Start the app by listening on the default Heroku port
 app.listen(PORT, () => {
