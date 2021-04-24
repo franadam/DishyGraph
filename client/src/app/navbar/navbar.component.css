@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #373B53;
+  color: white;
+}
+
+.logo {
+  display: flex;
+  background-color: #6F52ED;
+  height: 100%;
+  padding: 1rem .5rem;
+  display: flex;
+  align-items: center;
+}
+
+.logo__icon {
+  font-size: 2rem;
+  margin-right: .5rem;
+}
+
+.search-bar {
+  background-color: rgb(31, 31, 31);
+  padding: 0.5rem;
+  margin-right: .5rem;
+  box-shadow: 2px 2px 5px inset black;
+  color: white;
+  border: none;
+  border-radius: 50px;
+}

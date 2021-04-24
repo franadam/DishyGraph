@@ -1,1 +1,4 @@
-<p *ngFor="let country of countries">{{country.Code}}</p>
+<div class="container">
+  <app-bubble *ngIf="cdata.length" [data]="cdata" [countries]="countries"></app-bubble>
+  <p >country</p>
+</div>
