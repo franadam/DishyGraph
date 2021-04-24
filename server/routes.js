@@ -7,12 +7,12 @@ const {
   getMalaria,
 } = require('./controllers/disease');
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/countries', getCountries)
+router.get('/countries', getCountries);
 router.get('/disease/malaria', getMalaria);
 router.get('/disease/diphtheria', getDiphtheria);
 router.get('/disease/cholera', getCholera);
 router.get('/disease/poliomyelitis', getPoliomyelitis);
 
-module.exports = router
+module.exports = router;
