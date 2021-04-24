@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiClientService } from '../api-client.service';
-import Country from '../country.interface';
+import Country, { CountryDictionary } from '../country.interface';
+import { D3Service } from '../d3.service';
 import Disease from '../disease.interface';
 
 @Component({
@@ -9,25 +10,18 @@ import Disease from '../disease.interface';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  constructor(private apiService: ApiClientService) {}
+  constructor(private apiService: ApiClientService, private d3Service: D3Service) {}
 
-  countries: Country[] = [];
-  cdata : Disease[] = [];
+  countries: CountryDictionary = {};
+  cdata: Disease[] = [];
   diseases = { malaria: {}, diphtheria: {}, cholera: {}, poliomyelitis: {} };
 
   ngOnInit(): void {
-    this.getCountries();
     this.getMalaria();
     this.getDiphtheria();
     this.getPoliomyelitis();
     this.getCholera();
-  }
-
-  getCountries(): void {
-    this.apiService.getCountries().subscribe((countries) => {
-      console.log(`countries`, countries);
-      this.countries = countries;
-    });
+    this.countries = this.d3Service.countries;
   }
 
   getMalaria(): void {

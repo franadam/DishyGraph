@@ -10,9 +10,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BubbleComponent } from './home/bubble/bubble.component';
 import { PieComponent } from './d3/pie/pie.component';
 import { MalariaComponent } from './disease/malaria/malaria.component';
+import { BarComponent } from './d3/bar/bar.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, NavbarComponent, BubbleComponent, PieComponent, MalariaComponent],
+  declarations: [AppComponent, HomeComponent, NavbarComponent, BubbleComponent, PieComponent, MalariaComponent, BarComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FontAwesomeModule],
   providers: [],
   bootstrap: [AppComponent],

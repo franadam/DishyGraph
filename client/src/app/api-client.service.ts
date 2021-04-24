@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import Country from './country.interface';
+import Country, { CountryDictionary } from './country.interface';
 import Disease from './disease.interface';
 
 @Injectable({
@@ -27,10 +27,10 @@ export class ApiClientService {
     };
   }
 
-  getCountries(): Observable<Country[]> {
+  getCountries(): Observable<CountryDictionary> {
     return this.http
-      .get<Country[]>(`${this.baseURL}/countries`, this.httpOptions)
-      .pipe(catchError(this.handleError<Country[]>('getCountries', [])));
+      .get<CountryDictionary>(`${this.baseURL}/countries`, this.httpOptions)
+      .pipe(catchError(this.handleError<CountryDictionary>('getCountries', {})));
   }
 
   getMalaria(): Observable<Disease[]> {

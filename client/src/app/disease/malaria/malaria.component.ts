@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiClientService } from 'src/app/api-client.service';
-import Country from 'src/app/country.interface';
+import { D3Service } from 'src/app/d3.service';
+import { CountryDictionary } from 'src/app/country.interface';
+import * as graphType from 'src/app/graphData.interface';
 import Disease from 'src/app/disease.interface';
 
 @Component({
@@ -9,27 +11,27 @@ import Disease from 'src/app/disease.interface';
   styleUrls: ['./malaria.component.css'],
 })
 export class MalariaComponent implements OnInit {
-  constructor(private apiService: ApiClientService) {}
+  constructor(
+    private apiService: ApiClientService,
+    private d3Service: D3Service
+  ) {}
 
   data: Disease[] = [];
-  countries: Country[] = [];
+  countries: CountryDictionary = {};
+  pieData: graphType.Pie[] = [];
+  hierarchyData: graphType.Hierarchy[] = [];
+  year = 2000;
 
   ngOnInit(): void {
     this.getMalaria();
-    this.getCountries();
-  }
-
-  getCountries(): void {
-    this.apiService.getCountries().subscribe((countries) => {
-      console.log(`countries`, countries);
-      this.countries = countries;
-    });
+    this.countries = this.d3Service.countries;
   }
 
   getMalaria(): void {
     this.apiService.getMalaria().subscribe((data) => {
-      console.log(`getMalaria data`, data);
-      this.data = data.filter((d) => d.TimeDim === 2000);
+      this.data = data.filter((d) => d.TimeDim === this.year);
+      this.pieData = this.d3Service.formatToPieData(this.data);
+      this.hierarchyData = this.d3Service.formatToHierarchyData(this.data, 'malaria');
     });
   }
 }
