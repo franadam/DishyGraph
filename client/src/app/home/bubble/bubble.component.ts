@@ -12,15 +12,8 @@ import { Hierarchy } from 'src/app/graphData.interface';
 export class BubbleComponent implements OnInit {
   constructor() {}
 
-  @Input() cholera: Hierarchy[] = [];
-  @Input() malaria: Hierarchy[] = [];
-  @Input() measles: Hierarchy[] = [];
-  @Input() tuberculosis: Hierarchy[] = [];
-  @Input() rubella: Hierarchy[] = [];
-  @Input() diphtheria: Hierarchy[] = [];
-  @Input() poliomyelitis: Hierarchy[] = [];
+  
   @Input() data: Hierarchy[] = [];
-
   @Input() countries: CountryDictionary = {};
 
 
@@ -35,15 +28,6 @@ export class BubbleComponent implements OnInit {
   private grid = { row: 15, width: 50 };
 
   ngOnInit(): void {
-    this.data = [
-      ...this.malaria,
-      ...this.cholera,
-      ...this.measles,
-      ...this.tuberculosis,
-      ...this.rubella,
-      ...this.diphtheria,
-      ...this.poliomyelitis,
-    ];
     this.createSvg();
     this.createColors();
     this.createScale();

@@ -23,7 +23,7 @@ export class MalariaComponent implements OnInit {
   pieData: graphType.Pie[] = [];
   hierarchyData: graphType.Hierarchy[] = [];
   year = 2000;
-
+  pieTitle = `Estimated case of Malaria by region in ${this.year}`;
   ngOnInit(): void {
     this.getMalaria();
     this.countries = this.d3Service.countries;

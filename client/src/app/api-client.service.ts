@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, filter } from 'rxjs/operators';
 
 import * as endpointType from './endpoint.interface';
 
@@ -37,7 +37,8 @@ export class ApiClientService {
   getMalaria(): Observable<endpointType.Disease[]> {
     return this.http
       .get<endpointType.Disease[]>(`${this.baseURL}/disease/malaria`, this.httpOptions)
-      .pipe(catchError(this.handleError<endpointType.Disease[]>('getMalaria', [])));
+      .pipe(
+        catchError(this.handleError<endpointType.Disease[]>('getMalaria', [])));
   }
 
   getDiphtheria(): Observable<endpointType.Disease[]> {

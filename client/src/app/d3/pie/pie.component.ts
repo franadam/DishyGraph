@@ -12,14 +12,15 @@ import CountryDictionary  from 'src/app/country.interface';
 })
 export class PieComponent implements OnInit {
   constructor() {}
-  
+
   @Input() data: graphType.Pie[] = [];
   @Input() countries!: CountryDictionary;
-  
-  private svg: any//d3.Selection<SVGSVGElement, unknown, HTMLElement, any>;
-  private graph: any//d3.Selection<SVGGElement, unknown, HTMLElement, any>;
-  private colors: any//d3.ScaleOrdinal<string, string, never>;
-  private legends: any//d3.Selection<SVGGElement, unknown, HTMLElement, any>;
+  @Input() title: string = '';
+
+  private svg: any; //d3.Selection<SVGSVGElement, unknown, HTMLElement, any>;
+  private graph: any; //d3.Selection<SVGGElement, unknown, HTMLElement, any>;
+  private colors: any; //d3.ScaleOrdinal<string, string, never>;
+  private legends: any; //d3.Selection<SVGGElement, unknown, HTMLElement, any>;
   private dims = { height: 300, width: 700, radius: 150 };
   private center = { x: this.dims.width / 2 + 5, y: this.dims.height / 2 + 5 };
   private margin = 150;
@@ -87,7 +88,6 @@ export class PieComponent implements OnInit {
 
     const angles = pie(this.data);
     const paths = this.graph.selectAll('.piece').data(angles);
-
 
     // Build the pie chart
     paths

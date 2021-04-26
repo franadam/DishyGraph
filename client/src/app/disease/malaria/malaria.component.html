@@ -1,15 +1,17 @@
-<div class="containerr">
+<div class="container">
   <h1 class="title">Malaria</h1>
   <div class="info">
     <div class="top">
       <h2>Most infected countries:</h2>
-      <ul class="list">
-        <li *ngFor="let country of hierarchyData">
+      <ul class="top__list">
+        <li class="top__item" *ngFor="let country of hierarchyData">
           <h4>{{country.countryName}} : </h4> <p>{{country.value}}</p>
         </li>
       </ul>
     </div>
   </div>
-  <app-pie *ngIf="pieData.length" [data]="pieData" [countries]="countries"></app-pie>
+  <div class="pie">
+  <app-pie *ngIf="pieData.length" [title]="pieTitle" [data]="pieData" [countries]="countries"></app-pie>
+  </div>
   <app-bar></app-bar>
 </div>

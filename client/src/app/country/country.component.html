@@ -5,6 +5,7 @@
       <h2>Popuation:</h2>
     </div>
   </div>
-  <app-pie *ngIf="pieData.length"  [data] = "pieData"  [countries]="countries"></app-pie>
+
+  <app-pie *ngIf="pieData.length" [title]="pieTitle" [data]="pieData"  [countries]="countries"></app-pie>
   <app-bar *ngIf="data.length" [cdata]="data"  [countries]="countries"></app-bar>
 </div>
