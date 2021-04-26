@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+
 import { ApiClientService } from '../api-client.service';
-import { CountryDictionary } from '../country.interface';
 import { D3Service } from '../d3.service';
-import Disease from '../disease.interface';
+
+import * as endpointType from 'src/app/endpoint.interface';
 import * as graphType from 'src/app/graphData.interface';
+import CountryDictionary from '../country.interface';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +19,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   countries: CountryDictionary = {};
-  cdata: Disease[] = [];
+  cdata: endpointType.Disease[] = [];
   diseases: graphType.Hierarchy[] = [];
   malaria: graphType.Hierarchy[] = [];
   cholera: graphType.Hierarchy[] = [];
@@ -37,6 +39,19 @@ export class HomeComponent implements OnInit {
     this.getRubella();
     this.getDiphtheria();
     this.getPoliomyelitis();
+    this.getData();
+  }
+
+  getData() : void {
+    this.diseases = [
+      ...this.malaria,
+      ...this.cholera,
+      ...this.measles,
+      ...this.tuberculosis,
+      ...this.rubella,
+      ...this.diphtheria,
+      ...this.poliomyelitis,
+    ];
   }
 
   getMalaria(): void {

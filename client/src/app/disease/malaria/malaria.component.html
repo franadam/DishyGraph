@@ -5,11 +5,11 @@
       <h2>Most infected countries:</h2>
       <ul class="list">
         <li *ngFor="let country of hierarchyData">
-          <h4>{{country.name}} : </h4> <p>{{country.value}}</p>
+          <h4>{{country.countryName}} : </h4> <p>{{country.value}}</p>
         </li>
       </ul>
     </div>
   </div>
-  <app-pie *ngIf="data.length" [data]="data" [regionData]="pieData" [countries]="countries"></app-pie>
+  <app-pie *ngIf="pieData.length" [data]="pieData" [countries]="countries"></app-pie>
   <app-bar></app-bar>
 </div>

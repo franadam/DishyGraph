@@ -3,8 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import Country, { CountryDictionary } from './country.interface';
-import Disease from './disease.interface';
+import * as endpointType from './endpoint.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -27,53 +26,53 @@ export class ApiClientService {
     };
   }
 
-  getCountries(): Observable<CountryDictionary> {
+  getCountries(): Observable<endpointType.Country[]> {
     return this.http
-      .get<CountryDictionary>(`${this.baseURL}/countries`, this.httpOptions)
+      .get<endpointType.Country[]>(`${this.baseURL}/countries`, this.httpOptions)
       .pipe(
-        catchError(this.handleError<CountryDictionary>('getCountries', {}))
+        catchError(this.handleError<endpointType.Country[]>('getCountries', []))
       );
   }
 
-  getMalaria(): Observable<Disease[]> {
+  getMalaria(): Observable<endpointType.Disease[]> {
     return this.http
-      .get<Disease[]>(`${this.baseURL}/disease/malaria`, this.httpOptions)
-      .pipe(catchError(this.handleError<Disease[]>('getMalaria', [])));
+      .get<endpointType.Disease[]>(`${this.baseURL}/disease/malaria`, this.httpOptions)
+      .pipe(catchError(this.handleError<endpointType.Disease[]>('getMalaria', [])));
   }
 
-  getDiphtheria(): Observable<Disease[]> {
+  getDiphtheria(): Observable<endpointType.Disease[]> {
     return this.http
-      .get<Disease[]>(`${this.baseURL}/disease/diphtheria`, this.httpOptions)
-      .pipe(catchError(this.handleError<Disease[]>('getDiphtheria', [])));
+      .get<endpointType.Disease[]>(`${this.baseURL}/disease/diphtheria`, this.httpOptions)
+      .pipe(catchError(this.handleError<endpointType.Disease[]>('getDiphtheria', [])));
   }
 
-  getCholera(): Observable<Disease[]> {
+  getCholera(): Observable<endpointType.Disease[]> {
     return this.http
-      .get<Disease[]>(`${this.baseURL}/disease/cholera`, this.httpOptions)
-      .pipe(catchError(this.handleError<Disease[]>('getCholera', [])));
+      .get<endpointType.Disease[]>(`${this.baseURL}/disease/cholera`, this.httpOptions)
+      .pipe(catchError(this.handleError<endpointType.Disease[]>('getCholera', [])));
   }
 
-  getPoliomyelitis(): Observable<Disease[]> {
+  getPoliomyelitis(): Observable<endpointType.Disease[]> {
     return this.http
-      .get<Disease[]>(`${this.baseURL}/disease/poliomyelitis`, this.httpOptions)
-      .pipe(catchError(this.handleError<Disease[]>('getPoliomyelitis', [])));
+      .get<endpointType.Disease[]>(`${this.baseURL}/disease/poliomyelitis`, this.httpOptions)
+      .pipe(catchError(this.handleError<endpointType.Disease[]>('getPoliomyelitis', [])));
   }
 
-  getRubella(): Observable<Disease[]> {
+  getRubella(): Observable<endpointType.Disease[]> {
     return this.http
-      .get<Disease[]>(`${this.baseURL}/disease/rubella`, this.httpOptions)
-      .pipe(catchError(this.handleError<Disease[]>('getRubella', [])));
+      .get<endpointType.Disease[]>(`${this.baseURL}/disease/rubella`, this.httpOptions)
+      .pipe(catchError(this.handleError<endpointType.Disease[]>('getRubella', [])));
   }
 
-  getMeasles(): Observable<Disease[]> {
+  getMeasles(): Observable<endpointType.Disease[]> {
     return this.http
-      .get<Disease[]>(`${this.baseURL}/disease/measles`, this.httpOptions)
-      .pipe(catchError(this.handleError<Disease[]>('getMeasles', [])));
+      .get<endpointType.Disease[]>(`${this.baseURL}/disease/measles`, this.httpOptions)
+      .pipe(catchError(this.handleError<endpointType.Disease[]>('getMeasles', [])));
   }
 
-  getTuberculosis(): Observable<Disease[]> {
+  getTuberculosis(): Observable<endpointType.Disease[]> {
     return this.http
-      .get<Disease[]>(`${this.baseURL}/disease/tuberculosis`, this.httpOptions)
-      .pipe(catchError(this.handleError<Disease[]>('getTuberculosis', [])));
+      .get<endpointType.Disease[]>(`${this.baseURL}/disease/tuberculosis`, this.httpOptions)
+      .pipe(catchError(this.handleError<endpointType.Disease[]>('getTuberculosis', [])));
   }
 }

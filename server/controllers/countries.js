@@ -5,12 +5,8 @@ const getCountries = async (req, res) => {
     const response = await axios.get(
       'https://ghoapi.azureedge.net/api/DIMENSION/COUNTRY/DimensionValues'
     );
-    const dico = {};
     const countries = response.data.value;
-    countries.forEach((c) => {
-      dico[c.Code] = c;
-    });
-    res.json(dico);
+    res.json(countries);
   } catch (error) {
     console.log('error :>> ', error);
   }

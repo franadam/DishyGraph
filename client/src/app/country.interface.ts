@@ -1,14 +1,13 @@
-interface Country {
-  Code: string;
-  Title: string;
-  ParentDimension: string;
-  Dimension: string;
-  ParentCode: string;
-  ParentTitle: string;
+export interface Country {
+  name: string;
+  code: string;
+  regionName: string;
+  regionCode: string;
+  value: number;
 }
 
-export interface CountryDictionary {
+interface CountryDictionary {
   [countryCode: string]: Country;
 }
 
-export default Country;
+export default CountryDictionary;

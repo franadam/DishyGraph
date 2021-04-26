@@ -1,8 +1,10 @@
 interface Disease {
-  NumericValue: number;
-  SpatialDimType: string;
-  SpatialDim: string;
-  TimeDimType: string;
-  TimeDim: number;
+  name: string;
+  value: number;
+  placeDim: string;
+  place: string;
+  timeDim: string;
+  time: number;
 }
+
 export default Disease;

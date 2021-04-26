@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as d3 from 'd3';
-import Disease from '../../disease.interface';
+
 import * as graphType from 'src/app/graphData.interface';
+import { Disease } from 'src/app/endpoint.interface';
+import CountryDictionary  from 'src/app/country.interface';
 
 @Component({
   selector: 'app-pie',
@@ -11,9 +13,8 @@ import * as graphType from 'src/app/graphData.interface';
 export class PieComponent implements OnInit {
   constructor() {}
   
-  @Input() data: Disease[] = [];
-  @Input() regionData: graphType.Pie[] = [];
-  @Input() countries: any;
+  @Input() data: graphType.Pie[] = [];
+  @Input() countries!: CountryDictionary;
   
   private svg: any//d3.Selection<SVGSVGElement, unknown, HTMLElement, any>;
   private graph: any//d3.Selection<SVGGElement, unknown, HTMLElement, any>;
@@ -28,7 +29,7 @@ export class PieComponent implements OnInit {
     this.createColors();
     this.createLengend();
     this.drawChart();
-    // console.log(`regionData`, this.regionData);
+    // console.log(`pieData`, this.data);
   }
 
   private createGraph(): void {
@@ -46,7 +47,7 @@ export class PieComponent implements OnInit {
   private createColors(): void {
     this.colors = d3
       .scaleOrdinal(d3.schemeSet3)
-      .domain(this.regionData.map((d) => d.name));
+      .domain(this.data.map((d) => d.name));
   }
 
   private createLengend(): void {
@@ -56,7 +57,7 @@ export class PieComponent implements OnInit {
 
     this.legends
       .selectAll('.dot')
-      .data(this.regionData)
+      .data(this.data)
       .enter()
       .append('circle')
       .attr('cx', 100)
@@ -66,7 +67,7 @@ export class PieComponent implements OnInit {
 
     this.legends
       .selectAll('.label')
-      .data(this.regionData)
+      .data(this.data)
       .enter()
       .append('text')
       .attr('x', 120)
@@ -84,7 +85,7 @@ export class PieComponent implements OnInit {
       .outerRadius(this.dims.radius)
       .innerRadius(this.dims.radius / 2);
 
-    const angles = pie(this.regionData);
+    const angles = pie(this.data);
     const paths = this.graph.selectAll('.piece').data(angles);
 
 

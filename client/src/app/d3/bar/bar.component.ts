@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as d3 from 'd3';
-import { CountryDictionary } from 'src/app/country.interface';
-import Disease from 'src/app/disease.interface';
+import CountryDictionary from 'src/app/country.interface';
+
+import * as endpointType from 'src/app/endpoint.interface';
 import { Hierarchy } from 'src/app/graphData.interface';
 
 @Component({
@@ -12,7 +13,7 @@ import { Hierarchy } from 'src/app/graphData.interface';
 export class BarComponent implements OnInit {
   constructor() {}
 
-  @Input() cdata: Disease[] = [];
+  @Input() cdata: endpointType.Disease[] = [];
   @Input() cholera: Hierarchy[] = [];
   @Input() malaria: Hierarchy[] = [];
   @Input() measles: Hierarchy[] = [];

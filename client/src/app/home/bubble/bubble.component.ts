@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as d3 from 'd3';
-import { CountryDictionary } from 'src/app/country.interface';
+
+import CountryDictionary from 'src/app/country.interface';
 import { Hierarchy } from 'src/app/graphData.interface';
 
 @Component({
@@ -18,10 +19,10 @@ export class BubbleComponent implements OnInit {
   @Input() rubella: Hierarchy[] = [];
   @Input() diphtheria: Hierarchy[] = [];
   @Input() poliomyelitis: Hierarchy[] = [];
+  @Input() data: Hierarchy[] = [];
 
   @Input() countries: CountryDictionary = {};
 
-  private data: Hierarchy[] = [];
 
   private svg!: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>;
   private rScale!: d3.ScaleLinear<number, number, never>;
@@ -48,7 +49,10 @@ export class BubbleComponent implements OnInit {
     this.createScale();
     this.drawChart();
     console.log(`BubbleComponent data`, this.data);
-    console.log(`BubbleComponent data map`, this.data.filter(d => d.value != null).map(d => d.value));
+    console.log(
+      `BubbleComponent data map`,
+      this.data.filter((d) => d.value != null).map((d) => d.value)
+    );
   }
 
   private createSvg(): void {
@@ -76,7 +80,7 @@ export class BubbleComponent implements OnInit {
       ((i % this.grid.row) + 0.5) * this.grid.width,
       (Math.floor(i / this.grid.row) + 0.5) * this.grid.width,
     ];
-  }
+  };
 
   private createScale(): void {
     this.rScale = d3

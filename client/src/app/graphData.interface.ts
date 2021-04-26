@@ -1,14 +1,15 @@
 interface Hierarchy {
-  name: string;
-  code: string;
-  parentName: string;
-  parentCode: string;
+  countryName: string;
+  countryCode: string;
+  regionName: string;
+  regionCode: string;
   value: number;
+  disease: string;
 }
 
 interface Pie {
   name: string;
-  code: string;
+  code?: string;
   value: number;
 }
 
