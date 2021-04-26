@@ -6,6 +6,7 @@ import { D3Service } from 'src/app/d3.service';
 import * as graphType from 'src/app/graphData.interface';
 import * as endpointType from 'src/app/endpoint.interface';
 import CountryDictionary from 'src/app/country.interface';
+import Disease from 'src/app/disease.interface';
 
 @Component({
   selector: 'app-malaria',
@@ -18,7 +19,7 @@ export class MalariaComponent implements OnInit {
     private d3Service: D3Service
   ) {}
 
-  data: endpointType.Disease[] = [];
+  data: Disease[] = [];
   countries: CountryDictionary = {};
   pieData: graphType.Pie[] = [];
   hierarchyData: graphType.Hierarchy[] = [];
@@ -31,11 +32,8 @@ export class MalariaComponent implements OnInit {
 
   getMalaria(): void {
     this.apiService.getMalaria().subscribe((data) => {
-      this.data = data.filter((d) => d.TimeDim === this.year);
-      this.pieData = this.d3Service.formatToPieData(
-        this.d3Service.getDisease(this.data, 'malaria'),
-        'region'
-      );
+      this.data = data.filter((d) => d.time === this.year);
+      this.pieData = this.d3Service.formatToPieData(this.data, 'region');
       console.log(`this.pieData`, this.pieData);
       const hierarchyData = this.d3Service.formatToHierarchyData(
         this.data,

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Observable, forkJoin } from 'rxjs';
-import { map} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import * as endpointType from 'src/app/endpoint.interface';
 import { Hierarchy, Pie } from '../graphData.interface';
@@ -10,7 +10,7 @@ import CountryDictionary, { Country } from '../country.interface';
 
 import { ApiClientService } from '../api-client.service';
 import { D3Service } from '../d3.service';
-//import Disease from '../disease.interface';
+import Disease from '../disease.interface';
 
 @Component({
   selector: 'app-country',
@@ -36,14 +36,15 @@ export class CountryComponent implements OnInit {
   };
   data: endpointType.Disease[] = [];
   pieData: Pie[] = [];
-  diseases: Pie[] = [];
+  barData: Disease[] = [];
   year = 2009;
-  pieTitle = `Estimated case of Malaria by region in ${this.year}`;
+  pieTitle = `Estimated case of infectious diseas in ${this.year}`;
 
   ngOnInit(): void {
     this.countries = this.d3Service.countries;
     this.getCountry();
-    this.getData();
+    this.getPieData();
+    this.getBarData();
   }
 
   getCountry(): void {
@@ -54,15 +55,28 @@ export class CountryComponent implements OnInit {
     //console.log(`this.country`, this.country);
   }
 
-  getData(): void {
-    const $malaria = this.getMalaria();
-    const $measles = this.getMeasles();
-    const $cholera = this.getCholera();
-    const $tuberculosis = this.getTuberculosis();
-    const $rubella = this.getRubella();
-    const $diphtheria = this.getDiphtheria();
-    const $poliomyelitis = this.getPoliomyelitis();
+  private filterHelper = (d: Disease) => {
+    return (
+      d.placeDim === 'COUNTRY' &&
+      d.place === this.countryCode
+    );
+  };
+
+  getPieData(): void {
+    const mapHelper = (disease: Disease[]) => {
+        const filtered = disease.filter((d) => d.time === this.year);
+        return this.d3Service.formatToPieData(filtered, 'disease');
+    };
+
+    const $malaria = this.getMalaria().pipe(map(mapHelper));
+    const $measles = this.getMeasles().pipe(map(mapHelper));
+    const $cholera = this.getCholera().pipe(map(mapHelper));
+    const $tuberculosis = this.getTuberculosis().pipe(map(mapHelper));
+    const $rubella = this.getRubella().pipe(map(mapHelper));
+    const $diphtheria = this.getDiphtheria().pipe(map(mapHelper));
+    const $poliomyelitis = this.getPoliomyelitis().pipe(map(mapHelper));
     const pieData: Pie[] = [];
+
     forkJoin(
       $malaria,
       $measles,
@@ -77,129 +91,83 @@ export class CountryComponent implements OnInit {
     });
   }
 
-  getMalaria(): Observable<Pie[]> {
+  getBarData(): void {
+    const $malaria = this.getMalaria();
+    const $measles = this.getMeasles();
+    const $cholera = this.getCholera();
+    const $tuberculosis = this.getTuberculosis();
+    const $rubella = this.getRubella();
+    const $diphtheria = this.getDiphtheria();
+    const $poliomyelitis = this.getPoliomyelitis();
+    const barData: Disease[] = [];
+
+    forkJoin(
+      $malaria,
+      $measles,
+      $cholera,
+      $tuberculosis,
+      $rubella,
+      $diphtheria,
+      $poliomyelitis
+    ).subscribe((data) => {
+      this.barData = data[0] //barData.concat(...data);
+      console.log(`bar mergeAll data`, data);
+    });
+  }
+
+  getMalaria = (): Observable<Disease[]> => {
     return this.apiService.getMalaria().pipe(
-      map((endpointData) => {
-        const filteredData = endpointData.filter((d) => {
-          return (
-            d.SpatialDimType === 'COUNTRY' &&
-            d.TimeDim === this.year &&
-            d.SpatialDim === this.countryCode
-          );
-        });
-        return this.d3Service.formatToPieData(
-          this.d3Service.getDisease(filteredData, 'malaria'),
-          'disease'
-        );
+      map((disease) => {
+        return disease.filter((d) => this.filterHelper(d));
       })
     );
-  }
+  };
 
-  getDiphtheria(): Observable<Pie[]> {
+  getDiphtheria = (): Observable<Disease[]> => {
     return this.apiService.getDiphtheria().pipe(
-      map((endpointData) => {
-        const filteredData = endpointData.filter((d) => {
-          return (
-            d.SpatialDimType === 'COUNTRY' &&
-            d.TimeDim === this.year &&
-            d.SpatialDim === this.countryCode
-          );
-        });
-        return this.d3Service.formatToPieData(
-          this.d3Service.getDisease(filteredData, 'diphtheria'),
-          'disease'
-        );
+      map((disease) => {
+        return disease.filter((d) => this.filterHelper(d));
       })
     );
-  }
+  };
 
-  getCholera(): Observable<Pie[]> {
+  getCholera = (): Observable<Disease[]> => {
     return this.apiService.getCholera().pipe(
-      map((endpointData) => {
-        const filteredData = endpointData.filter((d) => {
-          return (
-            d.SpatialDimType === 'COUNTRY' &&
-            d.TimeDim === this.year &&
-            d.SpatialDim === this.countryCode
-          );
-        });
-        return this.d3Service.formatToPieData(
-          this.d3Service.getDisease(filteredData, 'cholera'),
-          'disease'
-        );
+      map((disease) => {
+        return disease.filter((d) => this.filterHelper(d));
       })
     );
-  }
+  };
 
-  getPoliomyelitis(): Observable<Pie[]> {
+  getPoliomyelitis = (): Observable<Disease[]> => {
     return this.apiService.getPoliomyelitis().pipe(
-      map((endpointData) => {
-        const filteredData = endpointData.filter((d) => {
-          return (
-            d.SpatialDimType === 'COUNTRY' &&
-            d.TimeDim === this.year &&
-            d.SpatialDim === this.countryCode
-          );
-        });
-        return this.d3Service.formatToPieData(
-          this.d3Service.getDisease(filteredData, 'poliomyelitis'),
-          'disease'
-        );
+      map((disease) => {
+        return disease.filter((d) => this.filterHelper(d));
       })
     );
-  }
+  };
 
-  getMeasles(): Observable<Pie[]> {
+  getMeasles = (): Observable<Disease[]> => {
     return this.apiService.getMeasles().pipe(
-      map((endpointData) => {
-        const filteredData = endpointData.filter((d) => {
-          return (
-            d.SpatialDimType === 'COUNTRY' &&
-            d.TimeDim === this.year &&
-            d.SpatialDim === this.countryCode
-          );
-        });
-        return this.d3Service.formatToPieData(
-          this.d3Service.getDisease(filteredData, 'measles'),
-          'disease'
-        );
+      map((disease) => {
+        return disease.filter((d) => this.filterHelper(d));
       })
     );
-  }
+  };
 
-  getRubella(): Observable<Pie[]> {
+  getRubella = (): Observable<Disease[]> => {
     return this.apiService.getRubella().pipe(
-      map((endpointData) => {
-        const filteredData = endpointData.filter((d) => {
-          return (
-            d.SpatialDimType === 'COUNTRY' &&
-            d.TimeDim === this.year &&
-            d.SpatialDim === this.countryCode
-          );
-        });
-        return this.d3Service.formatToPieData(
-          this.d3Service.getDisease(filteredData, 'rubella'),
-          'disease'
-        );
+      map((disease) => {
+        return disease.filter((d) => this.filterHelper(d));
       })
     );
-  }
+  };
 
-  getTuberculosis(): Observable<Pie[]> {
+  getTuberculosis = (): Observable<Disease[]> => {
     return this.apiService.getTuberculosis().pipe(
-      map((endpointData) => {
-        const filteredData = endpointData.filter((d) => {
-          return (
-            d.SpatialDimType === 'COUNTRY' &&
-            d.TimeDim === this.year &&
-            d.SpatialDim === this.countryCode
-          );
-        });
-        return this.d3Service.formatToPieData(
-          this.d3Service.getDisease(filteredData, 'tuberculosis'),
-          'disease'
-        );
+      map((disease) => {
+        return disease.filter((d) => this.filterHelper(d));
       })
     );
-  }
+  };
 }

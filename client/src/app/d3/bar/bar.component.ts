@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import CountryDictionary from 'src/app/country.interface';
+import Disease from 'src/app/disease.interface';
 
 import * as endpointType from 'src/app/endpoint.interface';
 import { Hierarchy } from 'src/app/graphData.interface';
@@ -13,58 +14,54 @@ import { Hierarchy } from 'src/app/graphData.interface';
 export class BarComponent implements OnInit {
   constructor() {}
 
-  @Input() cdata: endpointType.Disease[] = [];
-  @Input() cholera: Hierarchy[] = [];
-  @Input() malaria: Hierarchy[] = [];
-  @Input() measles: Hierarchy[] = [];
-  @Input() tuberculosis: Hierarchy[] = [];
-  @Input() rubella: Hierarchy[] = [];
-  @Input() diphtheria: Hierarchy[] = [];
-  @Input() poliomyelitis: Hierarchy[] = [];
-
   @Input() countries: CountryDictionary = {};
+  @Input() data: Disease[] = [];
 
-  private data: Hierarchy[] = [];
+  title = 'hello bar';
 
+  private svgDims = { width: 720, height: 400 };
+  private margin = { height: 50, width: 100 };
+  private graphDims = {
+    width: this.svgDims.width - 2 * this.margin.width,
+    height: this.svgDims.height - 2 * this.margin.height,
+  };
+  private transition = 1500;
   private svg!: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>;
-  private rScale!: d3.ScaleLinear<number, number, never>;
+  private yScale!: d3.ScaleLinear<number, number, never>;
+  private xScale!: d3.ScaleBand<string>;
   private graph!: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
   private colors!: d3.ScaleOrdinal<string, string, never>;
-  private margin = 50;
-  private dims = { width: 1050, height: 1720 };
+  private xAxisGroup!: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
+  private yAxisGroup!: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
+  private yAxis!: d3.Axis<d3.NumberValue>;
+  private xAxis!: d3.Axis<string>;
 
   ngOnInit(): void {
-    this.data = [
-      ...this.malaria,
-      ...this.cholera,
-      ...this.measles,
-      ...this.tuberculosis,
-      ...this.rubella,
-      ...this.diphtheria,
-      ...this.poliomyelitis,
-    ];
     this.createSvg();
     this.createColors();
     this.createScale();
+    this.createAxis();
     this.drawChart();
-    console.log(`BubbleComponent data`, this.data);
+    console.log(`bar data`, this.data);
     console.log(
-      `BubbleComponent data map`,
+      `bar data map`,
       this.data.filter((d) => d.value != null).map((d) => d.value)
     );
   }
 
   private createSvg(): void {
     this.svg = d3
-      .select('figure#bubble')
+      .select('figure#bar')
       .append('svg')
-      .attr('width', this.dims.width)
-      .attr('height', this.dims.height);
+      .attr('width', this.svgDims.width)
+      .attr('height', this.svgDims.height);
     this.graph = this.svg
       .append('g')
+      .attr('width', this.graphDims.width)
+      .attr('height', this.graphDims.height)
       .attr(
         'transform',
-        'translate(' + this.dims.width / 2 + ',' + this.dims.height / 2 + ')'
+        `translate(${this.margin.width},  ${this.margin.height})`
       );
   }
 
@@ -75,23 +72,58 @@ export class BarComponent implements OnInit {
   }
 
   private createScale(): void {
-    this.rScale = d3
+    this.xScale = d3
+      .scaleBand(this.data.map((d) => d.time))
+      .range([0, this.graphDims.width])
+      .paddingInner(0.3)
+      .paddingOuter(1);
+    this.yScale = d3
       .scaleLinear()
-      .range([1, 500])
-      .domain(this.data.filter((d) => d.value != null).map((d) => d.value));
+      .range([this.graphDims.height, 0])
+      .domain([0, Math.max(...this.data.filter((d) => d.value != null).map((d) => d.value))]);
+  }
+
+  private createAxis(): void {
+    this.xAxisGroup = this.graph
+      .append('g')
+      .attr('transform', `translate(0, ${this.graphDims.height})`);
+
+    this.xAxisGroup
+      .selectAll('text')
+      .attr('transform', 'rotate(-40)')
+      .attr('text-anchor', 'end')
+      .attr('fill', 'orange');
+
+    this.yAxisGroup = this.graph.append('g');
+
+    this.xAxis = d3.axisBottom(this.xScale);
+    this.yAxis = d3
+      .axisLeft(this.yScale)
+      .tickFormat((d) => d + ' case');
   }
 
   private drawChart(): void {
-    const rectWidth = 50;
-    const rects = this.svg.selectAll('rect').data(this.malaria);
+    const rectWidth = 20;
+    const rects = this.graph.selectAll('rect').data(this.data);
     rects
-      .join('rect')
-      .attr('width', rectWidth)
+      .join((enter) => {
+        return enter
+          .append('rect')
+          .attr('width', 0)
+          .attr('heigtht', 0)
+          .attr('y', this.graphDims.height);
+      })
       .attr('fill', 'red')
       .attr('fill-opacity', 0.5)
       .attr('stroke', 'red')
-      .attr('x', (d, i) => i * rectWidth)
-      .attr('y', (d) => 100 - d.value)
-      .attr('height', (d) => d.value);
+      .attr('x', (d,i) => i * rectWidth)
+      .transition()
+      .duration(this.transition)
+      .attr('y', (d) => this.yScale(d.value))
+      .attr('width', rectWidth)
+      .attr('height', (d) => this.graphDims.height - this.yScale(d.value));
+
+    this.xAxisGroup.call(this.xAxis);
+    this.yAxisGroup.call(this.yAxis);
   }
 }

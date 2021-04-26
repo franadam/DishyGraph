@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit {
     return this.apiService.getMalaria().pipe(
       map((endpointData) => {
         const filteredData = endpointData.filter((d) => {
-          return d.TimeDim === this.year && d.SpatialDimType === 'COUNTRY';
+          return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(filteredData, 'malaria');
       })
@@ -67,7 +67,7 @@ export class HomeComponent implements OnInit {
     return this.apiService.getDiphtheria().pipe(
       map((endpointData) => {
         const filteredData = endpointData.filter((d) => {
-          return d.TimeDim === this.year && d.SpatialDimType === 'COUNTRY';
+          return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
         filteredData,
@@ -81,7 +81,7 @@ export class HomeComponent implements OnInit {
     return this.apiService.getCholera().pipe(
       map((endpointData) => {
         const filteredData = endpointData.filter((d) => {
-          return d.TimeDim === this.year && d.SpatialDimType === 'COUNTRY';
+          return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
         filteredData,
@@ -95,7 +95,7 @@ export class HomeComponent implements OnInit {
     return this.apiService.getPoliomyelitis().pipe(
       map((endpointData) => {
         const filteredData = endpointData.filter((d) => {
-          return d.TimeDim === this.year && d.SpatialDimType === 'COUNTRY';
+          return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
         filteredData,
@@ -109,7 +109,7 @@ export class HomeComponent implements OnInit {
     return this.apiService.getMeasles().pipe(
       map((endpointData) => {
         const filteredData = endpointData.filter((d) => {
-          return d.TimeDim === this.year && d.SpatialDimType === 'COUNTRY';
+          return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
         filteredData,
@@ -122,7 +122,7 @@ export class HomeComponent implements OnInit {
     return this.apiService.getRubella().pipe(
       map((endpointData) => {
         const filteredData = endpointData.filter((d) => {
-          return d.TimeDim === this.year && d.SpatialDimType === 'COUNTRY';
+          return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
         filteredData,
@@ -136,7 +136,7 @@ export class HomeComponent implements OnInit {
     return this.apiService.getTuberculosis().pipe(
       map((endpointData) => {
         const filteredData = endpointData.filter((d) => {
-          return d.TimeDim === this.year && d.SpatialDimType === 'COUNTRY';
+          return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
         filteredData,

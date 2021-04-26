@@ -3,8 +3,7 @@ import { ApiClientService } from './api-client.service';
 
 import CountryDictionary from './country.interface';
 import Disease from './disease.interface';
-import * as endpointType from './endpoint.interface';
-import { Pie, Hierarchy } from './graphData.interface';
+import { Pie } from './graphData.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -18,38 +17,14 @@ export class D3Service {
 
   private getCountries(): void {
     this.apiService.getCountries().subscribe((data) => {
-      const countries = data.map(
-        ({ Code, Title, ParentCode, ParentTitle }: endpointType.Country) => ({
-          name: Title,
-          code: Code,
-          regionName: ParentTitle,
-          regionCode: ParentCode,
-          value: 0,
-        })
-      );
-      countries.forEach((c) => {
-        this.countries[c.code] = c;
-      });
+      this.countries = data;
     });
   }
 
-  getDisease(data: endpointType.Disease[], name: string) {
-    return data.map(
-      ({ NumericValue, SpatialDimType, SpatialDim, TimeDimType, TimeDim }) => ({
-        name,
-        value: NumericValue,
-        placeDim: SpatialDimType,
-        place: SpatialDim,
-        timeDim: TimeDimType,
-        time: TimeDim,
-      })
-    );
-  }
-
-  formatToHierarchyData(data: endpointType.Disease[], disease: string) {
+  formatToHierarchyData(data: Disease[], disease: string) {
     console.log(`d3service`, data);
     return data.map((curr) => {
-      const countryCode = curr.SpatialDim;
+      const countryCode = curr.place;
       const countryName = this.countries[countryCode].name;
       const regionName = this.countries[countryCode].regionName || 'Other';
       const regionCode = this.countries[countryCode].regionCode || 'Other';
@@ -58,8 +33,8 @@ export class D3Service {
         countryCode,
         regionName,
         regionCode,
-        value: curr.NumericValue,
-        year: curr.TimeDim,
+        value: curr.value,
+        year: curr.time,
         disease,
       };
     });

@@ -23,7 +23,7 @@ export class PieComponent implements OnInit {
   private legends: any; //d3.Selection<SVGGElement, unknown, HTMLElement, any>;
   private dims = { height: 300, width: 700, radius: 150 };
   private center = { x: this.dims.width / 2 + 5, y: this.dims.height / 2 + 5 };
-  private margin = 150;
+  private margin = {height: 50, width:100};
 
   ngOnInit(): void {
     this.createGraph();
@@ -37,8 +37,8 @@ export class PieComponent implements OnInit {
     this.svg = d3
       .select('figure#pie')
       .append('svg')
-      .attr('width', this.dims.width + this.margin)
-      .attr('height', this.dims.height + this.margin);
+      .attr('width', this.dims.width + this.margin.width)
+      .attr('height', this.dims.height + this.margin.height);
 
     this.graph = this.svg
       .append('g')
