@@ -30,7 +30,9 @@ export class ApiClientService {
   getCountries(): Observable<CountryDictionary> {
     return this.http
       .get<CountryDictionary>(`${this.baseURL}/countries`, this.httpOptions)
-      .pipe(catchError(this.handleError<CountryDictionary>('getCountries', {})));
+      .pipe(
+        catchError(this.handleError<CountryDictionary>('getCountries', {}))
+      );
   }
 
   getMalaria(): Observable<Disease[]> {
@@ -39,21 +41,39 @@ export class ApiClientService {
       .pipe(catchError(this.handleError<Disease[]>('getMalaria', [])));
   }
 
-  getDiphtheria(): Observable<any> {
+  getDiphtheria(): Observable<Disease[]> {
     return this.http
-      .get(`${this.baseURL}/disease/diphtheria`, this.httpOptions)
-      .pipe(catchError(this.handleError('getDiphtheria', [])));
+      .get<Disease[]>(`${this.baseURL}/disease/diphtheria`, this.httpOptions)
+      .pipe(catchError(this.handleError<Disease[]>('getDiphtheria', [])));
   }
 
-  getCholera(): Observable<any> {
+  getCholera(): Observable<Disease[]> {
     return this.http
-      .get(`${this.baseURL}/disease/cholera`, this.httpOptions)
-      .pipe(catchError(this.handleError('getCholera', [])));
+      .get<Disease[]>(`${this.baseURL}/disease/cholera`, this.httpOptions)
+      .pipe(catchError(this.handleError<Disease[]>('getCholera', [])));
   }
 
-  getPoliomyelitis(): Observable<any> {
+  getPoliomyelitis(): Observable<Disease[]> {
     return this.http
-      .get(`${this.baseURL}/disease/poliomyelitis`, this.httpOptions)
-      .pipe(catchError(this.handleError('getPoliomyelitis', [])));
+      .get<Disease[]>(`${this.baseURL}/disease/poliomyelitis`, this.httpOptions)
+      .pipe(catchError(this.handleError<Disease[]>('getPoliomyelitis', [])));
+  }
+
+  getRubella(): Observable<Disease[]> {
+    return this.http
+      .get<Disease[]>(`${this.baseURL}/disease/rubella`, this.httpOptions)
+      .pipe(catchError(this.handleError<Disease[]>('getRubella', [])));
+  }
+
+  getMeasles(): Observable<Disease[]> {
+    return this.http
+      .get<Disease[]>(`${this.baseURL}/disease/measles`, this.httpOptions)
+      .pipe(catchError(this.handleError<Disease[]>('getMeasles', [])));
+  }
+
+  getTuberculosis(): Observable<Disease[]> {
+    return this.http
+      .get<Disease[]>(`${this.baseURL}/disease/tuberculosis`, this.httpOptions)
+      .pipe(catchError(this.handleError<Disease[]>('getTuberculosis', [])));
   }
 }

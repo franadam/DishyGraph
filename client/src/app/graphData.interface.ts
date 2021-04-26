@@ -1,9 +1,9 @@
 interface Hierarchy {
   name: string;
   code: string;
-  parentName : string;
-  parentCode : string;
-  value: number; 
+  parentName: string;
+  parentCode: string;
+  value: number;
 }
 
 interface Pie {

@@ -19,7 +19,8 @@ export class MalariaComponent implements OnInit {
   data: Disease[] = [];
   countries: CountryDictionary = {};
   pieData: graphType.Pie[] = [];
-  hierarchyData: graphType.Hierarchy[] = [];
+  // hierarchyData: graphType.Hierarchy[] = [];
+  hierarchyData: any[] = [];
   year = 2000;
 
   ngOnInit(): void {
@@ -31,7 +32,13 @@ export class MalariaComponent implements OnInit {
     this.apiService.getMalaria().subscribe((data) => {
       this.data = data.filter((d) => d.TimeDim === this.year);
       this.pieData = this.d3Service.formatToPieData(this.data);
-      this.hierarchyData = this.d3Service.formatToHierarchyData(this.data, 'malaria');
+      const hierarchyData = this.d3Service.formatToHierarchyData(
+        this.data,
+        'malaria'
+      );
+      this.hierarchyData = hierarchyData
+        .sort((a, b) =>  b.value - a.value)
+        .slice(0, 3);
     });
   }
 }

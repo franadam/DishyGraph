@@ -1,0 +1,10 @@
+<div class="containerr">
+  <h1 class="title">{{countryCode}}</h1>
+  <div class="info">
+    <div class="top">
+      <h2>Popuation:</h2>
+    </div>
+  </div>
+  <app-pie *ngIf="data.length" [data]="data" [regionData]="pieData" [countries]="countries"></app-pie>
+  <app-bar *ngIf="data.length" [cdata]="data"  [countries]="countries"></app-bar>
+</div>

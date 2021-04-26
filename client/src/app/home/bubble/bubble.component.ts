@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as d3 from 'd3';
+import { CountryDictionary } from 'src/app/country.interface';
+import { Hierarchy } from 'src/app/graphData.interface';
 
 @Component({
   selector: 'app-bubble',
@@ -9,24 +11,45 @@ import * as d3 from 'd3';
 export class BubbleComponent implements OnInit {
   constructor() {}
 
-  ngOnInit(): void {
-    console.log(`data`, this.data);
-    this.createSvg();
-    this.createColors();
-    this.drawChart();
-  }
+  @Input() cholera: Hierarchy[] = [];
+  @Input() malaria: Hierarchy[] = [];
+  @Input() measles: Hierarchy[] = [];
+  @Input() tuberculosis: Hierarchy[] = [];
+  @Input() rubella: Hierarchy[] = [];
+  @Input() diphtheria: Hierarchy[] = [];
+  @Input() poliomyelitis: Hierarchy[] = [];
 
-  @Input() data: any;
-  @Input() countries: any;
+  @Input() countries: CountryDictionary = {};
 
-  private svg: any;
-  private graph: any;
+  private data: Hierarchy[] = [];
+
+  private svg!: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>;
+  private rScale!: d3.ScaleLinear<number, number, never>;
+  private graph!: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
+  private colors!: d3.ScaleOrdinal<string, string, never>;
   private margin = 50;
   private width = 1050;
   private height = 1720;
   // The radius of the pie chart is half the smallest side
-  private colors: any;
   private grid = { row: 15, width: 50 };
+
+  ngOnInit(): void {
+    this.data = [
+      ...this.malaria,
+      ...this.cholera,
+      ...this.measles,
+      ...this.tuberculosis,
+      ...this.rubella,
+      ...this.diphtheria,
+      ...this.poliomyelitis,
+    ];
+    this.createSvg();
+    this.createColors();
+    this.createScale();
+    this.drawChart();
+    console.log(`BubbleComponent data`, this.data);
+    console.log(`BubbleComponent data map`, this.data.filter(d => d.value != null).map(d => d.value));
+  }
 
   private createSvg(): void {
     this.svg = d3
@@ -45,11 +68,7 @@ export class BubbleComponent implements OnInit {
   private createColors(): void {
     this.colors = d3
       .scaleOrdinal(d3.schemeSet2)
-      .domain([
-        ...this.data.map((d: any) => this.countries[d.SpatialDim].ParentTitle),
-        'Other',
-      ]);
-    console.log(`this.colors('Other')`, this.colors('Other'));
+      .domain([...this.data.map((d: any) => d.disease), 'Other']);
   }
 
   private calculateGridPos = (i: number) => {
@@ -57,7 +76,14 @@ export class BubbleComponent implements OnInit {
       ((i % this.grid.row) + 0.5) * this.grid.width,
       (Math.floor(i / this.grid.row) + 0.5) * this.grid.width,
     ];
-  };
+  }
+
+  private createScale(): void {
+    this.rScale = d3
+      .scaleLinear()
+      .range([1, 500])
+      .domain(this.data.filter((d) => d.value != null).map((d) => d.value));
+  }
 
   private drawChart(): void {
     const countries = this.svg
@@ -65,18 +91,15 @@ export class BubbleComponent implements OnInit {
       .data(this.data)
       .enter()
       .append('circle')
-      .attr('fill', (d: any) =>
-        this.colors(this.countries[d.SpatialDim].ParentTitle || 'Other')
-      )
+      .attr('fill', (d: any) => this.colors(d.disease || 'Other'))
       .attr('fill-opacity', 0.5)
       .attr('r', 8)
+      .attr('daeta', (d: any) => this.rScale(d.value))
       .attr(
         'transform',
         (_: any, i: number) => `translate(${this.calculateGridPos(i)})`
       )
-      .attr('stroke', (d: any) =>
-        this.colors(this.countries[d.SpatialDim].ParentTitle || 'Other')
-      )
+      .attr('stroke', (d: any) => this.colors(d.disease || 'Other'))
       .style('stroke-width', 1);
     countries
       .selectAll('text')

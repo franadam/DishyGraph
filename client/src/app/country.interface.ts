@@ -8,7 +8,7 @@ interface Country {
 }
 
 export interface CountryDictionary {
-  [countryCode:string] : Country
+  [countryCode: string]: Country;
 }
 
 export default Country;

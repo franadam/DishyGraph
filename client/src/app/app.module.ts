@@ -11,9 +11,10 @@ import { BubbleComponent } from './home/bubble/bubble.component';
 import { PieComponent } from './d3/pie/pie.component';
 import { MalariaComponent } from './disease/malaria/malaria.component';
 import { BarComponent } from './d3/bar/bar.component';
+import { CountryComponent } from './country/country.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, NavbarComponent, BubbleComponent, PieComponent, MalariaComponent, BarComponent],
+  declarations: [AppComponent, HomeComponent, NavbarComponent, BubbleComponent, PieComponent, MalariaComponent, BarComponent, CountryComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FontAwesomeModule],
   providers: [],
   bootstrap: [AppComponent],

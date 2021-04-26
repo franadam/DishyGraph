@@ -10,28 +10,28 @@ import * as graphType from 'src/app/graphData.interface';
 })
 export class PieComponent implements OnInit {
   constructor() {}
-
-  ngOnInit(): void {
-    this.createSvg();
-    this.createColors();
-    this.createLengend();
-    this.drawChart();
-    console.log(`regionData`, this.regionData);
-  }
-
+  
   @Input() data: Disease[] = [];
   @Input() regionData: graphType.Pie[] = [];
   @Input() countries: any;
-
-  private svg: any;
-  private graph: any;
-  private legends: any;
+  
+  private svg: any//d3.Selection<SVGSVGElement, unknown, HTMLElement, any>;
+  private graph: any//d3.Selection<SVGGElement, unknown, HTMLElement, any>;
+  private colors: any//d3.ScaleOrdinal<string, string, never>;
+  private legends: any//d3.Selection<SVGGElement, unknown, HTMLElement, any>;
   private dims = { height: 300, width: 700, radius: 150 };
   private center = { x: this.dims.width / 2 + 5, y: this.dims.height / 2 + 5 };
   private margin = 150;
-  private colors: any;
 
-  private createSvg(): void {
+  ngOnInit(): void {
+    this.createGraph();
+    this.createColors();
+    this.createLengend();
+    this.drawChart();
+    // console.log(`regionData`, this.regionData);
+  }
+
+  private createGraph(): void {
     this.svg = d3
       .select('figure#pie')
       .append('svg')
@@ -45,7 +45,7 @@ export class PieComponent implements OnInit {
 
   private createColors(): void {
     this.colors = d3
-      .scaleOrdinal(d3['schemeSet3'])
+      .scaleOrdinal(d3.schemeSet3)
       .domain(this.regionData.map((d) => d.name));
   }
 
@@ -87,6 +87,7 @@ export class PieComponent implements OnInit {
     const angles = pie(this.regionData);
     const paths = this.graph.selectAll('.piece').data(angles);
 
+
     // Build the pie chart
     paths
       .enter()
@@ -107,6 +108,7 @@ export class PieComponent implements OnInit {
       .data(angles)
       .enter()
       .append('text')
+      .attr('fill', (d: any) => this.colors(d.data.name))
       .text((d: any) => d.data.name)
       .attr('transform', (d: any) => `translate(${labelLocation.centroid(d)})`)
       .style('text-anchor', 'middle')

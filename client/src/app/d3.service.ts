@@ -20,15 +20,16 @@ export class D3Service {
     });
   }
 
-  formatToHierarchyData(data: Disease[], disease:string) {
+  formatToHierarchyData(data: Disease[], disease: string) {
     console.log(`d3service`, data);
     return data.map((curr) => {
-      const name = this.countries[curr.SpatialDim].Title;
-      const parentName = this.countries[curr.SpatialDim].ParentTitle || 'Other';
-      const parentCode = this.countries[curr.SpatialDim].ParentCode || 'Other';
+      const code = curr.SpatialDim;
+      const name = this.countries[code].Title;
+      const parentName = this.countries[code].ParentTitle || 'Other';
+      const parentCode = this.countries[code].ParentCode || 'Other';
       return {
         name,
-        code: curr.SpatialDim,
+        code,
         parentName,
         parentCode,
         value: curr.NumericValue,

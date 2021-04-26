@@ -7,4 +7,9 @@
 
 html {
   min-height: 100vh;
+  background-color: #F8F8FB;
+}
+
+ul {
+  list-style: none;
 }
