@@ -5,7 +5,7 @@ import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import * as endpointType from 'src/app/endpoint.interface';
-import { Hierarchy, Pie } from '../graphData.interface';
+import { Bar, Pie } from '../graphData.interface';
 import CountryDictionary, { Country } from '../country.interface';
 
 import { ApiClientService } from '../api-client.service';
@@ -36,10 +36,11 @@ export class CountryComponent implements OnInit {
   };
   data: endpointType.Disease[] = [];
   pieData: Pie[] = [];
-  barData: Disease[] = [];
+  barData: Bar[] = [];
   year = 2009;
   pieTitle = `Estimated case of infectious diseas in ${this.year}`;
-
+  barTitle = `Estimated case of infectious diseas by years`;
+  periodOfTime = 20;
   ngOnInit(): void {
     this.countries = this.d3Service.countries;
     this.getCountry();
@@ -49,23 +50,23 @@ export class CountryComponent implements OnInit {
 
   getCountry(): void {
     this.countryCode = `${this.route.snapshot.paramMap.get('code')}`;
-    this.country = this.countries[this.countryCode];
-    //console.log(`this.countryCode`, this.countryCode);
-    //console.log(`this.countries`, this.countries);
-    //console.log(`this.country`, this.country);
+    this.apiService.getCountries().subscribe((data) => {
+      this.countries = data;
+      this.country = this.countries[this.countryCode];
+      //console.log(`this.countryCode`, this.countryCode);
+      console.log(`this.countries`, this.countries);
+      console.log(`this.country`, this.country);
+    });
   }
 
   private filterHelper = (d: Disease) => {
-    return (
-      d.placeDim === 'COUNTRY' &&
-      d.place === this.countryCode
-    );
+    return d.placeDim === 'COUNTRY' && d.place === this.countryCode;
   };
 
   getPieData(): void {
     const mapHelper = (disease: Disease[]) => {
-        const filtered = disease.filter((d) => d.time === this.year);
-        return this.d3Service.formatToPieData(filtered, 'disease');
+      const filtered = disease.filter((d) => d.time === this.year);
+      return this.d3Service.formatToPieData(filtered, 'disease');
     };
 
     const $malaria = this.getMalaria().pipe(map(mapHelper));
@@ -110,8 +111,26 @@ export class CountryComponent implements OnInit {
       $diphtheria,
       $poliomyelitis
     ).subscribe((data) => {
-      this.barData = data[0] //barData.concat(...data);
-      console.log(`bar mergeAll data`, data);
+      const res = barData.concat(...data);
+      const dico: {
+        [year: string]: { year: number; [disease: string]: number };
+      } = {};
+      res.reduce((acc, curr) => {
+        if (!acc[curr.time]) {
+          acc[curr.time] = { year: curr.time, [curr.name]: curr.value };
+        } else {
+          acc[curr.time] = { ...acc[curr.time], [curr.name]: curr.value };
+        }
+        return acc;
+      }, dico);
+      const result: any = Object.values(dico);
+      let keys: any = [];
+      for (let elem of result) {
+        keys = keys.concat(...Object.keys(elem));
+      }
+      result.__proto__.columns = [...new Set(keys)];
+      result.__proto__.yAxisTitle = 'Cases';
+      this.barData = result;
     });
   }
 

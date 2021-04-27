@@ -13,9 +13,19 @@ interface Pie {
   value: number;
 }
 
+interface Bar {
+  [disease: string]: number;
+  year: number;
+}
+
+interface BarArr {
+  prototype?:any
+}
+//BarArray.prototype.columns = []
+
 interface Force {
   nodes: [];
   links: [];
 }
 
-export { Hierarchy, Pie, Force };
+export { Hierarchy, Pie, Force, Bar, BarArr };

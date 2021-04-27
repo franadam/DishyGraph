@@ -1,5 +1,5 @@
-<div class="containerr">
-  <h1 class="title">{{countryCode}}</h1>
+<div class="container">
+  <h1 class="title">{{country.name}}</h1>
   <div class="info">
     <div class="top">
       <h2>Popuation:</h2>
@@ -8,5 +8,5 @@
   <!--
   <app-pie *ngIf="pieData.length" [title]="pieTitle" [data]="pieData"  [countries]="countries"></app-pie>
   -->
-  <app-bar *ngIf="barData.length" [data]="barData"  [countries]="countries"></app-bar>
+  <app-bar *ngIf="barData.length"  [title]="barTitle" [data]="barData.slice(barData.length - periodOfTime)"  [countries]="countries"></app-bar>
 </div>
