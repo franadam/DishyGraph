@@ -68,15 +68,18 @@ export class BarComponent implements OnInit {
   private createColors(): void {
     this.colors = d3
       .scaleOrdinal(d3.schemeSet2)
-      .domain([...this.data.map((d: any) => d.disease), 'Other']);
+      .domain(this.data.map((d: any) => d.disease));
   }
 
   private createScale(): void {
     this.xScale = d3
-      .scaleBand(this.data.map((d) => d.time))
+      .scaleBand(this.data.filter((d) => d.value != null).map((d) => d.time))
       .range([0, this.graphDims.width])
       .paddingInner(0.3)
-      .paddingOuter(1);
+      .paddingOuter(1)
+      .domain(
+        this.data.filter((d) => d.value != null).map((d) => d.time.toString())
+      );
     this.yScale = d3
       .scaleLinear()
       .range([this.graphDims.height, 0])
@@ -103,7 +106,8 @@ export class BarComponent implements OnInit {
   }
 
   private drawChart(): void {
-    const rectWidth = 20;
+    const rectWidth = this.xScale.bandwidth();
+    console.log(`rectWidth`, rectWidth)
     const rects = this.graph.selectAll('rect').data(this.data);
     rects
       .join((enter) => {
@@ -116,11 +120,11 @@ export class BarComponent implements OnInit {
       .attr('fill', 'red')
       .attr('fill-opacity', 0.5)
       .attr('stroke', 'red')
-      .attr('x', (d,i) => i * rectWidth)
+      .attr('x', (d, i) => this.xScale(d.time.toString()) || 0 )
       .transition()
       .duration(this.transition)
       .attr('y', (d) => this.yScale(d.value))
-      .attr('width', rectWidth)
+      .attr('width', this.xScale.bandwidth())
       .attr('height', (d) => this.graphDims.height - this.yScale(d.value));
 
     this.xAxisGroup.call(this.xAxis);
