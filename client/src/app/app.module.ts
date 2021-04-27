@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { BubbleComponent } from './home/bubble/bubble.component';
+import { BubbleComponent } from './d3/bubble/bubble.component';
 import { PieComponent } from './d3/pie/pie.component';
 import { MalariaComponent } from './disease/malaria/malaria.component';
 import { BarComponent } from './d3/bar/bar.component';

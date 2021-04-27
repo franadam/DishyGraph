@@ -21,7 +21,6 @@ export class HomeComponent implements OnInit {
   ) {}
 
   countries: CountryDictionary = {};
-  cdata: endpointType.Disease[] = [];
   diseases: graphType.Hierarchy[] = [];
   year = 2009;
 
@@ -40,7 +39,7 @@ export class HomeComponent implements OnInit {
     const $poliomyelitis = this.getPoliomyelitis();
     const hierarchyData: graphType.Hierarchy[] = [];
     forkJoin(
-      $malaria,
+      //$malaria,
       $measles,
       $cholera,
       $tuberculosis,

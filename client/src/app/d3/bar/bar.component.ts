@@ -14,7 +14,7 @@ export class BarComponent implements OnInit {
 
   @Input() countries: CountryDictionary = {};
   @Input() data: Bar[] | any = [];
-  @Input() title: string = ''
+  @Input() title: string = '';
 
   private svgDims = { width: 900, height: 500 };
   private margin = { height: 50, width: 50 };
@@ -54,12 +54,19 @@ export class BarComponent implements OnInit {
   > = d3.select('g');
   private yAxis: d3.Axis<d3.NumberValue> = d3.axisLeft(this.yScale);
   private xAxis: d3.Axis<string> = d3.axisBottom(this.xScale0);
+  private legends!: d3.Selection<
+    SVGGElement | d3.BaseType,
+    string,
+    SVGGElement,
+    unknown
+  >;
 
   ngOnInit(): void {
     this.createSvg();
     this.createColors();
     this.createScale();
     this.createAxis();
+    this.createLegend();
     this.drawChart();
   }
 
@@ -118,6 +125,30 @@ export class BarComponent implements OnInit {
     //.tickFormat((d) => d + ' cases')
   }
 
+  private createLegend(): void {
+    this.legends = this.svg.append('g')
+      .attr('transform', `translate(${this.graphDims.width - this.margin.width},0)`)
+      .attr('font-family', 'sans-serif')
+      .selectAll('.legend')
+      .data(this.colors.domain().slice().reverse())
+      .join('g')
+      .attr('transform', (d, i) => `translate(0,${i * 20})`);
+
+    this.legends
+      .append('rect')
+      .attr('x', -24)
+      .attr('width', 16)
+      .attr('height', 16)
+      .attr('fill', this.colors);
+
+    this.legends
+      .append('text')
+      .style('text-transform', 'capitalize')
+      .attr('y', 9.5)
+      .attr('dy', '0.35em')
+      .text((d) => d);
+  }
+
   private drawChart(): void {
     const years = this.graph
       .selectAll('.year')
@@ -148,6 +179,7 @@ export class BarComponent implements OnInit {
       .attr('width', this.xScale1.bandwidth())
       .attr('height', (d) => this.yScale(1) - this.yScale(d.value || 1));
 
+      this.graph.call(() => this.legends)
     this.xAxisGroup
       .call(this.xAxis)
       .attr('transform', `translate(0, ${this.graphDims.height})`)

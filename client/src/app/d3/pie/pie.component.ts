@@ -17,13 +17,42 @@ export class PieComponent implements OnInit {
   @Input() countries!: CountryDictionary;
   @Input() title: string = '';
 
-  private svg: any; //d3.Selection<SVGSVGElement, unknown, HTMLElement, any>;
-  private graph: any; //d3.Selection<SVGGElement, unknown, HTMLElement, any>;
-  private colors: any; //d3.ScaleOrdinal<string, string, never>;
-  private legends: any; //d3.Selection<SVGGElement, unknown, HTMLElement, any>;
+  private svg: d3.Selection<
+    SVGSVGElement,
+    unknown,
+    HTMLElement,
+    any
+  > = d3.select('g');
+  private yScale: d3.ScaleLinear<number, number, never> = d3.scaleLinear();
+  private xScale0: d3.ScaleBand<string> = d3.scaleBand();
+  private xScale1: d3.ScaleBand<string> = d3.scaleBand();
+  private graph: d3.Selection<
+    SVGGElement,
+    unknown,
+    HTMLElement,
+    any
+  > = d3.select('g');
+  private colors: d3.ScaleOrdinal<string, string, never> = d3.scaleOrdinal();
+  private xAxisGroup: d3.Selection<
+    SVGGElement,
+    unknown,
+    HTMLElement,
+    any
+  > = d3.select('g');
+  private yAxisGroup: d3.Selection<
+    SVGGElement,
+    unknown,
+    HTMLElement,
+    any
+  > = d3.select('g');
+  private yAxis: d3.Axis<d3.NumberValue> = d3.axisLeft(this.yScale);
+  private xAxis: d3.Axis<string> = d3.axisBottom(this.xScale0);
+  private legends: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
+    d3.select('g');
+
   private dims = { height: 300, width: 700, radius: 150 };
   private center = { x: this.dims.width / 2 + 5, y: this.dims.height / 2 + 5 };
-  private margin = {height: 50, width:100};
+  private margin = { height: 50, width: 100 };
 
   ngOnInit(): void {
     this.createGraph();
@@ -47,7 +76,7 @@ export class PieComponent implements OnInit {
 
   private createColors(): void {
     this.colors = d3
-      .scaleOrdinal(d3.schemeSet3)
+      .scaleOrdinal(d3.schemeSet2)
       .domain(this.data.map((d) => d.name));
   }
 
@@ -62,7 +91,7 @@ export class PieComponent implements OnInit {
       .enter()
       .append('circle')
       .attr('cx', 100)
-      .attr('cy', (d: any, i: number) => 100 + i * 25) // 100 is where the first dot appears. 25 is the distance between dots
+      .attr('cy', (d: any, i: number) => 100 + i * 25) 
       .attr('r', 7)
       .attr('fill', (d: any) => this.colors(d.name));
 
@@ -81,7 +110,7 @@ export class PieComponent implements OnInit {
     // Compute the position of each group on the pie:
     const pie = d3.pie<any>().value((d) => d.value);
 
-    const arcPath = d3
+    const arcPath: d3.Arc<any, d3.DefaultArcObject> | any = d3
       .arc()
       .outerRadius(this.dims.radius)
       .innerRadius(this.dims.radius / 2);
@@ -95,7 +124,8 @@ export class PieComponent implements OnInit {
       .append('path')
       .attr('d', arcPath)
       .attr('fill', (d: any) => this.colors(d.data.name))
-      .attr('stroke', '#121926')
+      .attr('fill-opacity', 0.5)
+      .attr('stroke', (d: any) => this.colors(d.data.name))
       .style('stroke-width', 2);
 
     // Add labels
