@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as d3 from 'd3';
 
 import CountryDictionary from 'src/app/country.interface';
@@ -10,7 +12,7 @@ import { Hierarchy } from 'src/app/graphData.interface';
   styleUrls: ['./bubble.component.css'],
 })
 export class BubbleComponent implements OnInit {
-  constructor() {}
+  constructor(private route: ActivatedRoute, private router: Router, private location: Location) {}
 
   @Input() data: Hierarchy[] = [];
   @Input() countries: CountryDictionary = {};
@@ -111,7 +113,7 @@ export class BubbleComponent implements OnInit {
       .append('g')
       .attr(
         'transform',
-        `translate(${this.margin.width}, ${this.graphDims.height/2})`
+        `translate(${this.margin.width}, ${this.graphDims.height / 2})`
       );
 
     this.legends
@@ -134,11 +136,10 @@ export class BubbleComponent implements OnInit {
       .text((d: string) => d)
       .attr('font-family', 'sans-serif')
       .style('text-transform', 'capitalize');
-
   }
 
   private drawChart(): void {
-    const countries = this.graph
+    const countries: any = this.graph
       .selectAll('.country')
       .data(this.root.leaves())
       .join((enter) => {
@@ -152,30 +153,63 @@ export class BubbleComponent implements OnInit {
     countries
       .transition()
       .duration(this.transition)
-      .attr('transform', (d) => `translate(${d.x + 1},${d.y + 1})`);
+      .attr('transform', (d: any) => `translate(${d.x + 1},${d.y + 1})`);
 
     countries
       .append('circle')
-      //.attr('id', (d) => (d.leafUid = DOM.uid('leaf')).id)
+      .attr('id', (d: any) => d.data.disease + d.data.countryCode)
       .attr('fill', (d: any) => this.colors(d.data.disease))
       .attr('r', 8)
       .attr('fill-opacity', 0.5)
       .attr('stroke', (d: any) => this.colors(d.data.disease))
-      .attr('daeta', (d: any) => this.rScale(d.value))
       .style('stroke-width', 1)
       .transition()
       .duration(this.transition)
-      .attr('r', (d) => d.r);
-    //.attr(
-    //  'transform',
-    //  (_: any, i: number) => `translate(${this.calculateGridPos(i)})`
-    //)
-    //countries
-    //  .selectAll('text')
-    //  .data((d: any) => d.data.countryCode)
-    //  .join('text')
-    //  .attr('x', 0)
-    //  .attr('y', '.35em')
-    //  .text((d: any) => d);
+      .attr('r', (d: any) => d.r);
+
+    countries
+      .append('clipPath')
+      .attr('id', (d: any) => 'clip_' + d.data.disease + d.data.countryCode)
+      .append('use')
+      .attr('xlink:href', (d: any) => d.data.disease + d.data.countryCode);
+
+    countries
+      .append('text')
+      .attr(
+        'clip-path',
+        (d: any) => 'clip_' + d.data.disease + d.data.countryCode
+      )
+      .selectAll('tspan')
+      .data((d: any) => d.data)
+      .join('tspan')
+      .attr('x', 0)
+      .attr(
+        'y',
+        (d: any, i: any, nodes: any) => `${i - nodes.length / 2 + 0.8}em`
+      )
+      .text((d: any) => d.countryCode)
+      .attr('tt', (d: any) => {
+        console.log(`d`, d);
+        return d.countryCode;
+      });
+
+    const clip = (d: any) => `
+        <h4 class="clip__title">${d.data.countryName}</h4>
+        <p class="clip__disease"><span>${d.data.disease}</span>: ${d.data.value} cases</p>
+        `;
+    countries.append('title').html((d: any) => clip(d));
+
+    // add events
+
+    const clickHandler = (event : any, data: any) => {
+      const countryCode = data.data.countryCode;
+      this.router.navigateByUrl(`/country/${countryCode}`);
+    };
+
+    this.graph
+      .selectAll('circle')
+      .on('click', clickHandler)
+      //.on('mouseover', mouseOverHandler)
+      //.on('mouseout', mouseOutHandler)
   }
 }

@@ -37,7 +37,7 @@ export class CountryComponent implements OnInit {
   data: endpointType.Disease[] = [];
   pieData: Pie[] = [];
   barData: Bar[] = [];
-  year = 2009;
+  year = 2018;
   pieTitle = `Estimated case of infectious diseas in ${this.year}`;
   barTitle = `Estimated case of infectious diseas by years`;
   periodOfTime = 20;

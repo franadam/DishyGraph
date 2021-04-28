@@ -1,17 +1,34 @@
 <div class="container">
   <h1 class="title">Malaria</h1>
+  <form class="form" [formGroup]="contactForm" (ngSubmit)="submit()">
+    <p *ngIf="years.length">
+      <select class="form__select" formControlName="year">
+        <option [ngValue]="null" disabled>Select Year</option>
+        <option *ngFor="let year of years" [ngValue]="year.id">
+          {{ year.year }}
+        </option>
+      </select>
+
+      <button class="form__btn" type="submit">Submit</button>
+    </p>
+  </form>
   <div class="info">
     <div class="top">
       <h2>Most infected countries:</h2>
       <ul class="top__list">
         <li class="top__item" *ngFor="let country of hierarchyData">
-          <h4>{{country.countryName}} : </h4> <p>{{country.value}}</p>
+          <h4>{{ country.countryName }} :</h4>
+          <p>{{ country.value }}</p>
         </li>
       </ul>
     </div>
   </div>
   <div class="pie">
-  <app-pie *ngIf="pieData.length" [title]="pieTitle" [data]="pieData" [countries]="countries"></app-pie>
+    <app-pie
+      *ngIf="pieData.length"
+      [title]="pieTitle"
+      [data]="pieData"
+      [countries]="countries"
+    ></app-pie>
   </div>
-  <app-bar></app-bar>
 </div>

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,8 +15,23 @@ import { BarComponent } from './d3/bar/bar.component';
 import { CountryComponent } from './country/country.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, NavbarComponent, BubbleComponent, PieComponent, MalariaComponent, BarComponent, CountryComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FontAwesomeModule],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    NavbarComponent,
+    BubbleComponent,
+    PieComponent,
+    MalariaComponent,
+    BarComponent,
+    CountryComponent,
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FontAwesomeModule,
+    ReactiveFormsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

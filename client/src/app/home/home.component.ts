@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
 
   countries: CountryDictionary = {};
   diseases: graphType.Hierarchy[] = [];
-  year = 2009;
+  year = 2018;
 
   ngOnInit(): void {
     this.countries = this.d3Service.countries;

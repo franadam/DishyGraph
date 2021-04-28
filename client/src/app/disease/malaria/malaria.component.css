@@ -36,3 +36,21 @@
   text-transform: uppercase;
   font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
 }
+
+.form__select {
+  border-radius: 5px;
+  padding: 1rem;
+}
+
+.form__btn {
+  background-color: blueviolet;
+  border: none;
+  border-radius: 5px;
+  padding: 1rem;
+  text-transform: uppercase;
+}
+
+.form__btn:hover {
+  cursor: pointer;
+  color: white;
+}

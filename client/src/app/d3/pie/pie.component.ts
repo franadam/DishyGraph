@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Directive, Input, OnInit, SimpleChanges } from '@angular/core';
 import * as d3 from 'd3';
 
+import { ActivatedRoute, Router } from '@angular/router';
 import * as graphType from 'src/app/graphData.interface';
 import { Disease } from 'src/app/endpoint.interface';
 import CountryDictionary  from 'src/app/country.interface';
@@ -11,7 +12,7 @@ import CountryDictionary  from 'src/app/country.interface';
   styleUrls: ['./pie.component.css'],
 })
 export class PieComponent implements OnInit {
-  constructor() {}
+  constructor(private router: Router) {}
 
   @Input() data: graphType.Pie[] = [];
   @Input() countries!: CountryDictionary;
@@ -47,12 +48,20 @@ export class PieComponent implements OnInit {
   > = d3.select('g');
   private yAxis: d3.Axis<d3.NumberValue> = d3.axisLeft(this.yScale);
   private xAxis: d3.Axis<string> = d3.axisBottom(this.xScale0);
-  private legends: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
-    d3.select('g');
+  private legends: d3.Selection<
+    SVGGElement,
+    unknown,
+    HTMLElement,
+    any
+  > = d3.select('g');
 
   private dims = { height: 300, width: 700, radius: 150 };
   private center = { x: this.dims.width / 2 + 5, y: this.dims.height / 2 + 5 };
   private margin = { height: 50, width: 100 };
+
+  //@Directive({
+  //  selector: '[data, title]',
+  //})
 
   ngOnInit(): void {
     this.createGraph();
@@ -60,6 +69,17 @@ export class PieComponent implements OnInit {
     this.createLengend();
     this.drawChart();
     // console.log(`pieData`, this.data);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // changes.prop contains the old and the new value...
+    let change1 = changes['data'];
+    this.data = change1.currentValue;
+    console.log(`this.data`, this.data)
+    console.log(`change previousValue`, change1.previousValue);
+    console.log(`change1 currentValue`, change1.currentValue);
+    console.log(`change1 firstChange`, change1.firstChange);
+
   }
 
   private createGraph(): void {
@@ -91,7 +111,7 @@ export class PieComponent implements OnInit {
       .enter()
       .append('circle')
       .attr('cx', 100)
-      .attr('cy', (d: any, i: number) => 100 + i * 25) 
+      .attr('cy', (d: any, i: number) => 100 + i * 25)
       .attr('r', 7)
       .attr('fill', (d: any) => this.colors(d.name));
 
@@ -123,6 +143,7 @@ export class PieComponent implements OnInit {
       .enter()
       .append('path')
       .attr('d', arcPath)
+      .attr('id', (d: any) => d.data.disease)
       .attr('fill', (d: any) => this.colors(d.data.name))
       .attr('fill-opacity', 0.5)
       .attr('stroke', (d: any) => this.colors(d.data.name))
@@ -135,15 +156,66 @@ export class PieComponent implements OnInit {
       .outerRadius(this.dims.radius);
 
     paths
-      .selectAll('pieces')
+      .selectAll('.pieces')
       .data(angles)
-      .enter()
+      .join('path')
       .append('text')
-      .attr('fill', (d: any) => this.colors(d.data.name))
-      .text((d: any) => d.data.name)
-      .attr('transform', (d: any) => `translate(${labelLocation.centroid(d)})`)
-      .style('text-anchor', 'middle')
-      .attr('fill', 'black')
-      .style('font-size', 15);
+      .attr('fill', (d: any) => this.colors(d.data.name));
+    //.text((d: any) => d.data.name)
+    //.attr('transform', (d: any) => `translate(${labelLocation.centroid(d)})`)
+    //.style('text-anchor', 'middle')
+    //.attr('fill', 'black')
+    //.style('font-size', 15);
+
+    paths
+      .append('clipPath')
+      .attr('id', (d: any) => 'clip_' + d.data.disease)
+      .append('use')
+      .attr('xlink:href', (d: any) => d.data.disease);
+
+    paths
+      .append('text')
+      .attr('clip-path', (d: any) => 'clip_' + d.data.disease)
+      .selectAll('tspan')
+      .data((d: any) => d.data)
+      .join('tspan')
+      .attr('x', 0)
+      .attr(
+        'y',
+        (d: any, i: any, nodes: any) => `${i - nodes.length / 2 + 0.8}em`
+      )
+      .text((d: any) => d.countryCode)
+      .attr('tt', (d: any) => {
+        console.log(`d`, d);
+        return d.countryCode;
+      });
+
+    const clip = (d: any) => `
+        <h4 class="clip__title">${d.data.name}</h4>
+        <p class="clip__value">${d.data.value} cases</p>
+        `;
+    paths.append('title').html((d: any) => clip(d));
+
+    //function mouseOverHandler (event: any, data: any) {
+    //  d3.select(this)
+    //    .transition('ChangeFill')
+    //    .duration(300)
+    //    .attr('fill', '#fff');
+    //};
+    //
+    //function mouseOutHandler (event:any, data: any){
+    //  d3.select(this)
+    //    .transition('ChangeFill')
+    //    .duration(300)
+    //    .attr('fill', this.colors(data.data.disease));
+    //};
+    //
+    const clickHandler = (event: any, data: any) => {
+      const countryCode = data.data.countryCode;
+      this.router.navigateByUrl(`/disease/malaria`);
+    };
+    this.graph.selectAll('path').on('click', clickHandler);
+    //.on('mouseover', mouseOverHandler)
+    //.on('mouseout', mouseOutHandler)
   }
 }
