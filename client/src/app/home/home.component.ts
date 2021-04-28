@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private apiService: ApiClientService,
     private d3Service: D3Service
-  ) {}
+  ) { }
 
   countries: CountryDictionary = {};
   diseases: graphType.Hierarchy[] = [];
@@ -38,6 +38,7 @@ export class HomeComponent implements OnInit {
     const $diphtheria = this.getDiphtheria();
     const $poliomyelitis = this.getPoliomyelitis();
     const hierarchyData: graphType.Hierarchy[] = [];
+    //discuss later
     forkJoin(
       //$malaria,
       $measles,
@@ -69,9 +70,9 @@ export class HomeComponent implements OnInit {
           return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
-        filteredData,
-        'diphtheria'
-      );
+          filteredData,
+          'diphtheria'
+        );
       })
     )
   }
@@ -83,9 +84,9 @@ export class HomeComponent implements OnInit {
           return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
-        filteredData,
-        'cholera'
-      );
+          filteredData,
+          'cholera'
+        );
       })
     )
   }
@@ -97,9 +98,9 @@ export class HomeComponent implements OnInit {
           return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
-        filteredData,
-        'poliomyelitis'
-      );
+          filteredData,
+          'poliomyelitis'
+        );
       })
     )
   }
@@ -111,11 +112,12 @@ export class HomeComponent implements OnInit {
           return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
-        filteredData,
-        'measles'
-      );
+          filteredData,
+          'measles'
+        );
       })
-    )}
+    )
+  }
 
   getRubella(): Observable<graphType.Hierarchy[]> {
     return this.apiService.getRubella().pipe(
@@ -124,9 +126,9 @@ export class HomeComponent implements OnInit {
           return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
-        filteredData,
-        'rubella'
-      );
+          filteredData,
+          'rubella'
+        );
       })
     )
   }
@@ -138,9 +140,9 @@ export class HomeComponent implements OnInit {
           return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
-        filteredData,
-        'tuberculosis'
-      );
+          filteredData,
+          'tuberculosis'
+        );
       })
     )
   }
