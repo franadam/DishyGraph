@@ -38,9 +38,9 @@ export class HomeComponent implements OnInit {
     const $diphtheria = this.getDiphtheria();
     const $poliomyelitis = this.getPoliomyelitis();
     const hierarchyData: graphType.Hierarchy[] = [];
-    //discuss later
+    // discuss later
     forkJoin(
-      //$malaria,
+      // $malaria,
       $measles,
       $cholera,
       $tuberculosis,
@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit {
           'diphtheria'
         );
       })
-    )
+    );
   }
 
   getCholera(): Observable<graphType.Hierarchy[]> {
@@ -88,7 +88,7 @@ export class HomeComponent implements OnInit {
           'cholera'
         );
       })
-    )
+    );
   }
 
   getPoliomyelitis(): Observable<graphType.Hierarchy[]> {
@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit {
           'poliomyelitis'
         );
       })
-    )
+    );
   }
 
   getMeasles(): Observable<graphType.Hierarchy[]> {
@@ -116,7 +116,7 @@ export class HomeComponent implements OnInit {
           'measles'
         );
       })
-    )
+    );
   }
 
   getRubella(): Observable<graphType.Hierarchy[]> {
@@ -130,7 +130,7 @@ export class HomeComponent implements OnInit {
           'rubella'
         );
       })
-    )
+    );
   }
 
   getTuberculosis(): Observable<graphType.Hierarchy[]> {
@@ -144,6 +144,6 @@ export class HomeComponent implements OnInit {
           'tuberculosis'
         );
       })
-    )
+    );
   }
 }

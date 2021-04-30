@@ -53,7 +53,7 @@ export class CountryComponent implements OnInit {
     this.apiService.getCountries().subscribe((data) => {
       this.countries = data;
       this.country = this.countries[this.countryCode];
-      //console.log(`this.countryCode`, this.countryCode);
+      // console.log(`this.countryCode`, this.countryCode);
       console.log(`this.countries`, this.countries);
       console.log(`this.country`, this.country);
     });
@@ -61,7 +61,7 @@ export class CountryComponent implements OnInit {
 
   private filterHelper = (d: Disease) => {
     return d.placeDim === 'COUNTRY' && d.place === this.countryCode;
-  };
+  }
 
   getPieData(): void {
     const mapHelper = (disease: Disease[]) => {
@@ -125,7 +125,7 @@ export class CountryComponent implements OnInit {
       }, dico);
       const result: any = Object.values(dico);
       let keys: any = [];
-      for (let elem of result) {
+      for (const elem of result) {
         keys = keys.concat(...Object.keys(elem));
       }
       result.__proto__.columns = [...new Set(keys)];
@@ -140,7 +140,7 @@ export class CountryComponent implements OnInit {
         return disease.filter((d) => this.filterHelper(d));
       })
     );
-  };
+  }
 
   getDiphtheria = (): Observable<Disease[]> => {
     return this.apiService.getDiphtheria().pipe(
@@ -148,7 +148,7 @@ export class CountryComponent implements OnInit {
         return disease.filter((d) => this.filterHelper(d));
       })
     );
-  };
+  }
 
   getCholera = (): Observable<Disease[]> => {
     return this.apiService.getCholera().pipe(
@@ -156,7 +156,7 @@ export class CountryComponent implements OnInit {
         return disease.filter((d) => this.filterHelper(d));
       })
     );
-  };
+  }
 
   getPoliomyelitis = (): Observable<Disease[]> => {
     return this.apiService.getPoliomyelitis().pipe(
@@ -164,7 +164,7 @@ export class CountryComponent implements OnInit {
         return disease.filter((d) => this.filterHelper(d));
       })
     );
-  };
+  }
 
   getMeasles = (): Observable<Disease[]> => {
     return this.apiService.getMeasles().pipe(
@@ -172,7 +172,7 @@ export class CountryComponent implements OnInit {
         return disease.filter((d) => this.filterHelper(d));
       })
     );
-  };
+  }
 
   getRubella = (): Observable<Disease[]> => {
     return this.apiService.getRubella().pipe(
@@ -180,7 +180,7 @@ export class CountryComponent implements OnInit {
         return disease.filter((d) => this.filterHelper(d));
       })
     );
-  };
+  }
 
   getTuberculosis = (): Observable<Disease[]> => {
     return this.apiService.getTuberculosis().pipe(
@@ -188,5 +188,5 @@ export class CountryComponent implements OnInit {
         return disease.filter((d) => this.filterHelper(d));
       })
     );
-  };
+  }
 }
