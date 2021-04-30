@@ -98,7 +98,7 @@ export class BubbleComponent implements OnInit {
       ((i % this.grid.row) + 0.5) * this.grid.width,
       (Math.floor(i / this.grid.row) + 0.5) * this.grid.width,
     ];
-  };
+  }
 
   private createScale(): void {
     this.rScale = d3
@@ -201,15 +201,15 @@ export class BubbleComponent implements OnInit {
 
     // add events
 
-    const clickHandler = (event : any, data: any) => {
+    const clickHandler = (event: any, data: any) => {
       const countryCode = data.data.countryCode;
       this.router.navigateByUrl(`/country/${countryCode}`);
     };
 
     this.graph
       .selectAll('circle')
-      .on('click', clickHandler)
-      //.on('mouseover', mouseOverHandler)
-      //.on('mouseout', mouseOutHandler)
+      .on('click', clickHandler);
+      // .on('mouseover', mouseOverHandler)
+      // .on('mouseout', mouseOutHandler)
   }
 }
