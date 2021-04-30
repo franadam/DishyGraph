@@ -7,6 +7,8 @@ import * as endpointType from './endpoint.interface';
 import Disease from './disease.interface';
 import CountryDictionary from './country.interface';
 
+console.log('Hello');
+
 @Injectable({
   providedIn: 'root',
 })

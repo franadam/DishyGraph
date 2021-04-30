@@ -16,7 +16,7 @@ export class PieComponent implements OnInit {
 
   @Input() data: graphType.Pie[] = [];
   @Input() countries!: CountryDictionary;
-  @Input() title: string = '';
+  @Input() title = '';
 
   private svg: d3.Selection<
     SVGSVGElement,
@@ -59,9 +59,9 @@ export class PieComponent implements OnInit {
   private center = { x: this.dims.width / 2 + 5, y: this.dims.height / 2 + 5 };
   private margin = { height: 50, width: 100 };
 
-  //@Directive({
+  // @Directive({
   //  selector: '[data, title]',
-  //})
+  // })
 
   ngOnInit(): void {
     this.createGraph();
@@ -73,9 +73,9 @@ export class PieComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     // changes.prop contains the old and the new value...
-    let change1 = changes['data'];
+    const change1 = changes.data;
     this.data = change1.currentValue;
-    console.log(`this.data`, this.data)
+    console.log(`this.data`, this.data);
     console.log(`change previousValue`, change1.previousValue);
     console.log(`change1 currentValue`, change1.currentValue);
     console.log(`change1 firstChange`, change1.firstChange);
@@ -161,11 +161,11 @@ export class PieComponent implements OnInit {
       .join('path')
       .append('text')
       .attr('fill', (d: any) => this.colors(d.data.name));
-    //.text((d: any) => d.data.name)
-    //.attr('transform', (d: any) => `translate(${labelLocation.centroid(d)})`)
-    //.style('text-anchor', 'middle')
-    //.attr('fill', 'black')
-    //.style('font-size', 15);
+    // .text((d: any) => d.data.name)
+    // .attr('transform', (d: any) => `translate(${labelLocation.centroid(d)})`)
+    // .style('text-anchor', 'middle')
+    // .attr('fill', 'black')
+    // .style('font-size', 15);
 
     paths
       .append('clipPath')
@@ -196,26 +196,26 @@ export class PieComponent implements OnInit {
         `;
     paths.append('title').html((d: any) => clip(d));
 
-    //function mouseOverHandler (event: any, data: any) {
+    // function mouseOverHandler (event: any, data: any) {
     //  d3.select(this)
     //    .transition('ChangeFill')
     //    .duration(300)
     //    .attr('fill', '#fff');
-    //};
+    // };
     //
-    //function mouseOutHandler (event:any, data: any){
+    // function mouseOutHandler (event:any, data: any){
     //  d3.select(this)
     //    .transition('ChangeFill')
     //    .duration(300)
     //    .attr('fill', this.colors(data.data.disease));
-    //};
+    // };
     //
     const clickHandler = (event: any, data: any) => {
       const countryCode = data.data.countryCode;
       this.router.navigateByUrl(`/disease/malaria`);
     };
     this.graph.selectAll('path').on('click', clickHandler);
-    //.on('mouseover', mouseOverHandler)
-    //.on('mouseout', mouseOutHandler)
+    // .on('mouseover', mouseOverHandler)
+    // .on('mouseout', mouseOutHandler)
   }
 }

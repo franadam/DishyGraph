@@ -14,7 +14,7 @@ export class BarComponent implements OnInit {
 
   @Input() countries: CountryDictionary = {};
   @Input() data: Bar[] | any = [];
-  @Input() title: string = '';
+  @Input() title = '';
 
   private svgDims = { width: 900, height: 500 };
   private margin = { height: 50, width: 50 };
@@ -122,7 +122,7 @@ export class BarComponent implements OnInit {
 
     this.xAxis = d3.axisBottom(this.xScale0);
     this.yAxis = d3.axisLeft(this.yScale).ticks(null, 's');
-    //.tickFormat((d) => d + ' cases')
+    // .tickFormat((d) => d + ' cases')
   }
 
   private createLegend(): void {
@@ -179,7 +179,7 @@ export class BarComponent implements OnInit {
       .attr('width', this.xScale1.bandwidth())
       .attr('height', (d) => this.yScale(1) - this.yScale(d.value || 1));
 
-      this.graph.call(() => this.legends)
+    this.graph.call(() => this.legends);
     this.xAxisGroup
       .call(this.xAxis)
       .attr('transform', `translate(0, ${this.graphDims.height})`)

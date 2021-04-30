@@ -4,7 +4,7 @@ import { ApiClientService } from 'src/app/api-client.service';
 import { D3Service } from 'src/app/d3.service';
 
 import * as graphType from 'src/app/graphData.interface';
-//import * as endpointType from 'src/app/endpoint.interface';
+// import * as endpointType from 'src/app/endpoint.interface';
 import CountryDictionary from 'src/app/country.interface';
 import Disease from 'src/app/disease.interface';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -22,12 +22,12 @@ export class MalariaComponent implements OnInit {
     private d3Service: D3Service,
     private fb: FormBuilder
   ) {
-    this.year = 2009; //this.years[this.contactForm.value.year].year;
+    this.year = 2009; // this.years[this.contactForm.value.year].year;
   }
 
   contactForm!: FormGroup;
   years: { id: number; year: number }[] = [];
-  year: number = 2009;
+  year = 2009;
   $data: Observable<Disease[]> = new BehaviorSubject([]);
   data: Disease[] = [];
   dataFull: Disease[] = [];

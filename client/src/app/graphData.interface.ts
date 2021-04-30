@@ -19,9 +19,9 @@ interface Bar {
 }
 
 interface BarArr {
-  prototype?:any
+  prototype?: any;
 }
-//BarArray.prototype.columns = []
+// BarArray.prototype.columns = []
 
 interface Force {
   nodes: [];
