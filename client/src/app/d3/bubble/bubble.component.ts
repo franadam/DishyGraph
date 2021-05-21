@@ -12,12 +12,16 @@ import { Hierarchy } from 'src/app/graphData.interface';
   styleUrls: ['./bubble.component.css'],
 })
 export class BubbleComponent implements OnInit {
-  constructor(private route: ActivatedRoute, private router: Router, private location: Location) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private location: Location
+  ) {}
 
   @Input() data: Hierarchy[] = [];
   @Input() countries: CountryDictionary = {};
 
-  private svgDims = { width: 900, height: 700 };
+  private svgDims = { width: 1000, height: 700 };
   private margin = { height: 50, width: 10 };
   private graphDims = {
     width: this.svgDims.width - this.margin.width,
@@ -25,27 +29,15 @@ export class BubbleComponent implements OnInit {
   };
   private grid = { row: 15, width: 50 };
 
-  private svg: d3.Selection<
-    SVGSVGElement,
-    unknown,
-    HTMLElement,
-    any
-  > = d3.select('g');
+  private svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any> =
+    d3.select('g');
   private rScale!: d3.ScaleLinear<number, number, never>;
-  private graph: d3.Selection<
-    SVGGElement,
-    unknown,
-    HTMLElement,
-    any
-  > = d3.select('g');
+  private graph: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
+    d3.select('g');
   private colors!: d3.ScaleOrdinal<string, string, never>;
   private root!: d3.HierarchyCircularNode<unknown>; // = d3.hierarchy(this.data);
-  private legends: d3.Selection<
-    SVGGElement,
-    unknown,
-    HTMLElement,
-    any
-  > = d3.select('g');
+  private legends: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
+    d3.select('g');
   private transition = 3000;
 
   ngOnInit(): void {
@@ -201,15 +193,13 @@ export class BubbleComponent implements OnInit {
 
     // add events
 
-    const clickHandler = (event : any, data: any) => {
+    const clickHandler = (event: any, data: any) => {
       const countryCode = data.data.countryCode;
       this.router.navigateByUrl(`/country/${countryCode}`);
     };
 
-    this.graph
-      .selectAll('circle')
-      .on('click', clickHandler)
-      //.on('mouseover', mouseOverHandler)
-      //.on('mouseout', mouseOutHandler)
+    this.graph.selectAll('circle').on('click', clickHandler);
+    //.on('mouseover', mouseOverHandler)
+    //.on('mouseout', mouseOutHandler)
   }
 }
