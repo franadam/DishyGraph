@@ -11,6 +11,7 @@ import CountryDictionary, { Country } from '../country.interface';
 import { ApiClientService } from '../api-client.service';
 import { D3Service } from '../d3.service';
 import Disease from '../disease.interface';
+import { faMapMarkerAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-country',
@@ -32,7 +33,10 @@ export class CountryComponent implements OnInit {
     name: '',
     regionCode: '',
     regionName: '',
+    capital: '',
+    flag: '',
     value: 0,
+    population: 0,
   };
   data: endpointType.Disease[] = [];
   pieData: Pie[] = [];
@@ -41,6 +45,9 @@ export class CountryComponent implements OnInit {
   pieTitle = `Estimated case of infectious diseas in ${this.year}`;
   barTitle = `Estimated case of infectious diseas by years`;
   periodOfTime = 20;
+  faUser = faUser;
+  faMapMarkerAlt = faMapMarkerAlt;
+
   ngOnInit(): void {
     this.countries = this.d3Service.countries;
     this.getCountry();

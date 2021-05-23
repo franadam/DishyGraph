@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ApiClientService } from './api-client.service';
+import * as d3 from 'd3';
 
 import CountryDictionary from './country.interface';
 import Disease from './disease.interface';
 import { Pie } from './graphData.interface';
+import dimension from './d3.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +21,21 @@ export class D3Service {
     this.apiService.getCountries().subscribe((data) => {
       this.countries = data;
     });
+  }
+
+  createSvg(svgDims: dimension, graphDims: dimension, margin: dimension) {
+    const svg = d3
+      .select('figure#bubble')
+      .append('svg')
+      .attr('width', svgDims.width)
+      .attr('height', svgDims.height);
+    const graph = svg
+      .append('g')
+      .attr('width', graphDims.width)
+      .attr('height', graphDims.height)
+      .attr('transform', `translate(${margin.width},  ${margin.height})`);
+
+    return [svg, graph];
   }
 
   formatToHierarchyData(data: Disease[], disease: string) {

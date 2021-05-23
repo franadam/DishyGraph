@@ -28,22 +28,6 @@ export class ApiClientService {
     };
   }
 
-  toCountryType(data: endpointType.Country[]) {
-    const arr = data.map(({ Code, Title, ParentCode, ParentTitle }) => ({
-      name: Title,
-      code: Code,
-      regionName: ParentTitle,
-      regionCode: ParentCode,
-      value: 0,
-    }));
-
-    const countries: CountryDictionary = {};
-    arr.forEach((c) => {
-      countries[c.code] = c;
-    });
-    return countries;
-  }
-
   toDiseaseType(data: endpointType.Disease[], name: string) {
     return data.map(
       ({ NumericValue, SpatialDimType, SpatialDim, TimeDimType, TimeDim }) => ({
@@ -59,14 +43,8 @@ export class ApiClientService {
 
   getCountries(): Observable<CountryDictionary> {
     return this.http
-      .get<endpointType.Country[]>(
-        `${this.baseURL}/countries`,
-        this.httpOptions
-      )
+      .get<CountryDictionary>(`${this.baseURL}/countries`, this.httpOptions)
       .pipe(
-        map((endpointData) => {
-          return this.toCountryType(endpointData);
-        }),
         catchError(this.handleError<CountryDictionary>('getCountries', {}))
       );
   }

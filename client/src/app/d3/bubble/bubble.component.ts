@@ -21,13 +21,13 @@ export class BubbleComponent implements OnInit {
   @Input() data: Hierarchy[] = [];
   @Input() countries: CountryDictionary = {};
 
-  private svgDims = { width: 1000, height: 700 };
-  private margin = { height: 50, width: 10 };
+  private svgDims = { width: 1000, height: 500 };
+  private margin = { height: 10, width: 10 };
   private graphDims = {
     width: this.svgDims.width - this.margin.width,
     height: this.svgDims.height - this.margin.height,
   };
-  private grid = { row: 15, width: 50 };
+  private grid = { row: 10, width: 80 };
 
   private svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any> =
     d3.select('g');

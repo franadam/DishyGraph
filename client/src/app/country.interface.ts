@@ -4,6 +4,9 @@ export interface Country {
   regionName: string;
   regionCode: string;
   value: number;
+  population: number;
+  capital: string;
+  flag: string;
 }
 
 interface CountryDictionary {

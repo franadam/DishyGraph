@@ -1,10 +1,16 @@
-import { Component, Directive, Input, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Directive,
+  Input,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import * as d3 from 'd3';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import * as graphType from 'src/app/graphData.interface';
 import { Disease } from 'src/app/endpoint.interface';
-import CountryDictionary  from 'src/app/country.interface';
+import CountryDictionary from 'src/app/country.interface';
 
 @Component({
   selector: 'app-pie',
@@ -18,46 +24,26 @@ export class PieComponent implements OnInit {
   @Input() countries!: CountryDictionary;
   @Input() title: string = '';
 
-  private svg: d3.Selection<
-    SVGSVGElement,
-    unknown,
-    HTMLElement,
-    any
-  > = d3.select('g');
+  private svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any> =
+    d3.select('g');
   private yScale: d3.ScaleLinear<number, number, never> = d3.scaleLinear();
   private xScale0: d3.ScaleBand<string> = d3.scaleBand();
   private xScale1: d3.ScaleBand<string> = d3.scaleBand();
-  private graph: d3.Selection<
-    SVGGElement,
-    unknown,
-    HTMLElement,
-    any
-  > = d3.select('g');
+  private graph: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
+    d3.select('g');
   private colors: d3.ScaleOrdinal<string, string, never> = d3.scaleOrdinal();
-  private xAxisGroup: d3.Selection<
-    SVGGElement,
-    unknown,
-    HTMLElement,
-    any
-  > = d3.select('g');
-  private yAxisGroup: d3.Selection<
-    SVGGElement,
-    unknown,
-    HTMLElement,
-    any
-  > = d3.select('g');
+  private xAxisGroup: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
+    d3.select('g');
+  private yAxisGroup: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
+    d3.select('g');
   private yAxis: d3.Axis<d3.NumberValue> = d3.axisLeft(this.yScale);
   private xAxis: d3.Axis<string> = d3.axisBottom(this.xScale0);
-  private legends: d3.Selection<
-    SVGGElement,
-    unknown,
-    HTMLElement,
-    any
-  > = d3.select('g');
+  private legends: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
+    d3.select('g');
 
-  private dims = { height: 300, width: 700, radius: 150 };
+  private dims = { height: 200, width: 300, radius: 100 };
   private center = { x: this.dims.width / 2 + 5, y: this.dims.height / 2 + 5 };
-  private margin = { height: 50, width: 100 };
+  private margin = { height: 100, width: 100 };
 
   //@Directive({
   //  selector: '[data, title]',
@@ -67,6 +53,7 @@ export class PieComponent implements OnInit {
     this.createGraph();
     this.createColors();
     this.createLengend();
+    this.createScale();
     this.drawChart();
     // console.log(`pieData`, this.data);
   }
@@ -75,11 +62,10 @@ export class PieComponent implements OnInit {
     // changes.prop contains the old and the new value...
     let change1 = changes['data'];
     this.data = change1.currentValue;
-    console.log(`this.data`, this.data)
+    console.log(`this.data`, this.data);
     console.log(`change previousValue`, change1.previousValue);
     console.log(`change1 currentValue`, change1.currentValue);
     console.log(`change1 firstChange`, change1.firstChange);
-
   }
 
   private createGraph(): void {
@@ -103,7 +89,7 @@ export class PieComponent implements OnInit {
   private createLengend(): void {
     this.legends = this.svg
       .append('g')
-      .attr('transform', `translate(${this.dims.width - 140}, 10)`);
+      .attr('transform', `translate(${this.dims.width - 120}, 10)`);
 
     this.legends
       .selectAll('.dot')
@@ -121,9 +107,17 @@ export class PieComponent implements OnInit {
       .enter()
       .append('text')
       .attr('x', 120)
-      .attr('y', (d: any, i: number) => 100 + i * 25) // 100 is where the first dot appears. 25 is the distance between dots
+      .attr('y', (d: any, i: number) => 100 + i * 25)
       .text((d: any) => d.name)
       .attr('fill', '#6F52ED');
+  }
+
+  private createScale(): void {
+    let y_dom: number[] = [];
+    const [y_min, y_max] = d3.extent(this.data, (d: graphType.Pie) => d.value);
+    console.log(`[y_min, y_max] `, [y_min, y_max]);
+    if (y_min !== undefined && y_max !== undefined) y_dom = [y_min, y_max];
+    this.yScale = d3.scaleLog().domain(y_dom);
   }
 
   private drawChart(): void {
@@ -135,7 +129,13 @@ export class PieComponent implements OnInit {
       .outerRadius(this.dims.radius)
       .innerRadius(this.dims.radius / 2);
 
-    const angles = pie(this.data);
+    console.log(
+      `new data`,
+      this.data.map((a) => ({ ...a, value: this.yScale(a.value) }))
+    );
+    const angles = pie(
+      this.data.map((a) => ({ ...a, value: this.yScale(a.value) }))
+    );
     const paths = this.graph.selectAll('.piece').data(angles);
 
     // Build the pie chart
