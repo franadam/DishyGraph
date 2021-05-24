@@ -13,6 +13,7 @@ import { PieComponent } from './d3/pie/pie.component';
 import { MalariaComponent } from './disease/malaria/malaria.component';
 import { BarComponent } from './d3/bar/bar.component';
 import { CountryComponent } from './country/country.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { CountryComponent } from './country/country.component';
     MalariaComponent,
     BarComponent,
     CountryComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

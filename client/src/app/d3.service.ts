@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 
 import CountryDictionary from './country.interface';
 import Disease from './disease.interface';
-import { Pie } from './graphData.interface';
+import { Hierarchy, Pie } from './graphData.interface';
 import dimension from './d3.interface';
 
 @Injectable({
@@ -40,21 +40,26 @@ export class D3Service {
 
   formatToHierarchyData(data: Disease[], disease: string) {
     console.log(`d3service`, data);
-    return data.map((curr) => {
+    const res: Hierarchy[] = [];
+    data.forEach((curr) => {
       const countryCode = curr.place;
-      const countryName = this.countries[countryCode].name;
-      const regionName = this.countries[countryCode].regionName || 'Other';
-      const regionCode = this.countries[countryCode].regionCode || 'Other';
-      return {
-        countryName,
-        countryCode,
-        regionName,
-        regionCode,
-        value: curr.value,
-        year: curr.time,
-        disease,
-      };
+      if (this.countries[countryCode]) {
+        const countryName = this.countries[countryCode].name;
+        const regionName = this.countries[countryCode].regionName || 'Other';
+        const regionCode = this.countries[countryCode].regionCode || 'Other';
+        res.push({
+          countryName,
+          countryCode,
+          regionName,
+          regionCode,
+          value: curr.value,
+          year: curr.time,
+          disease,
+        });
+      }
     });
+
+    return res;
   }
 
   formatToPieData(data: Disease[], type: string) {

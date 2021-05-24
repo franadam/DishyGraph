@@ -1,10 +1,17 @@
 <div class="container">
-  <a class="logo" routerLink="/home">
-    <fa-icon class="logo__icon" [icon]="faVirus"></fa-icon>
-    <p>DishyGraph</p>
-  </a>
-  <nav class="nav">
-    <fa-icon class="icon" [icon]="faMapMarkedAlt"></fa-icon>
-  </nav>
-  <input type="text" class="search-bar" placeholder="search" />
+  <div class="wrapper">
+    <a class="logo" routerLink="/home">
+      <fa-icon class="logo__icon" [icon]="faVirus"></fa-icon>
+      <p>DishyGraph</p>
+    </a>
+    <!--
+    <nav class="nav">
+      <fa-icon class="icon" [icon]="faMapMarkedAlt"></fa-icon>
+    </nav>
+    -->
+    <div class="search__container">
+      <fa-icon class="icon" [icon]="faSearch"></fa-icon>
+      <input type="text" class="search-bar" placeholder="search" />
+    </div>
+  </div>
 </div>

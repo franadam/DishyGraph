@@ -5,6 +5,7 @@ interface Hierarchy {
   regionCode: string;
   value: number;
   disease: string;
+  year?: number;
 }
 
 interface Pie {
@@ -19,7 +20,7 @@ interface Bar {
 }
 
 interface BarArr {
-  prototype?:any
+  prototype?: any;
 }
 //BarArray.prototype.columns = []
 

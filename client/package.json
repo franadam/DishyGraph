@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "config": {
     "commitizen": {
-      "path": "git-cz"
+      "path": "./node_modules/cz-conventional-changelog"
     }
   },
   "scripts": {
@@ -43,6 +43,8 @@
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
+    "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
     "d3": "^6.7.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",

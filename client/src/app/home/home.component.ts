@@ -40,12 +40,7 @@ export class HomeComponent implements OnInit {
     const hierarchyData: graphType.Hierarchy[] = [];
     forkJoin(
       //$malaria,
-      $measles,
-      $cholera,
-      $tuberculosis,
-      $rubella,
-      $diphtheria,
-      $poliomyelitis
+      [$measles, $cholera, $tuberculosis, $rubella, $diphtheria, $poliomyelitis]
     ).subscribe((data) => {
       this.diseases = hierarchyData.concat(...data);
     });
@@ -68,12 +63,9 @@ export class HomeComponent implements OnInit {
         const filteredData = endpointData.filter((d) => {
           return d.time === this.year && d.placeDim === 'COUNTRY';
         });
-        return this.d3Service.formatToHierarchyData(
-        filteredData,
-        'diphtheria'
-      );
+        return this.d3Service.formatToHierarchyData(filteredData, 'diphtheria');
       })
-    )
+    );
   }
 
   getCholera(): Observable<graphType.Hierarchy[]> {
@@ -82,12 +74,9 @@ export class HomeComponent implements OnInit {
         const filteredData = endpointData.filter((d) => {
           return d.time === this.year && d.placeDim === 'COUNTRY';
         });
-        return this.d3Service.formatToHierarchyData(
-        filteredData,
-        'cholera'
-      );
+        return this.d3Service.formatToHierarchyData(filteredData, 'cholera');
       })
-    )
+    );
   }
 
   getPoliomyelitis(): Observable<graphType.Hierarchy[]> {
@@ -97,11 +86,11 @@ export class HomeComponent implements OnInit {
           return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
-        filteredData,
-        'poliomyelitis'
-      );
+          filteredData,
+          'poliomyelitis'
+        );
       })
-    )
+    );
   }
 
   getMeasles(): Observable<graphType.Hierarchy[]> {
@@ -110,12 +99,10 @@ export class HomeComponent implements OnInit {
         const filteredData = endpointData.filter((d) => {
           return d.time === this.year && d.placeDim === 'COUNTRY';
         });
-        return this.d3Service.formatToHierarchyData(
-        filteredData,
-        'measles'
-      );
+        return this.d3Service.formatToHierarchyData(filteredData, 'measles');
       })
-    )}
+    );
+  }
 
   getRubella(): Observable<graphType.Hierarchy[]> {
     return this.apiService.getRubella().pipe(
@@ -123,12 +110,9 @@ export class HomeComponent implements OnInit {
         const filteredData = endpointData.filter((d) => {
           return d.time === this.year && d.placeDim === 'COUNTRY';
         });
-        return this.d3Service.formatToHierarchyData(
-        filteredData,
-        'rubella'
-      );
+        return this.d3Service.formatToHierarchyData(filteredData, 'rubella');
       })
-    )
+    );
   }
 
   getTuberculosis(): Observable<graphType.Hierarchy[]> {
@@ -138,10 +122,10 @@ export class HomeComponent implements OnInit {
           return d.time === this.year && d.placeDim === 'COUNTRY';
         });
         return this.d3Service.formatToHierarchyData(
-        filteredData,
-        'tuberculosis'
-      );
+          filteredData,
+          'tuberculosis'
+        );
       })
-    )
+    );
   }
 }

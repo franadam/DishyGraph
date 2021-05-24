@@ -41,7 +41,7 @@ export class PieComponent implements OnInit {
   private legends: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
     d3.select('g');
 
-  private dims = { height: 200, width: 300, radius: 100 };
+  private dims = { height: 200, width: 350, radius: 100 };
   private center = { x: this.dims.width / 2 + 5, y: this.dims.height / 2 + 5 };
   private margin = { height: 100, width: 100 };
 
