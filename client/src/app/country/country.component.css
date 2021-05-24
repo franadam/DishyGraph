@@ -7,6 +7,7 @@
 
 .title {
   text-align: center;
+  color: var(--secondary-colour-lighter);
   margin: 2rem 0;
 }
 
@@ -52,12 +53,14 @@
   padding: 0.5rem;
   margin-right: 1rem;
   border-radius: 50%;
-  background-color: brown;
+  background-color: var(--tertiary-colour-ligth);
 }
 
 .card__icon {
   font-size: 1.4rem;
+  color: var(--tertiary-colour-darker);
 }
+
 .card__title {
   text-transform: capitalize;
   margin-bottom: 0.5rem;

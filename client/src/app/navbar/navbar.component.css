@@ -9,8 +9,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #373b53;
-  color: white;
+  background-color: var(--primary-colour-darker);
   width: 100%;
   box-shadow: 2px 2px 5px black;
 }

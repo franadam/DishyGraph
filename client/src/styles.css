@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-*{
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -7,7 +7,8 @@
 
 html {
   min-height: 100vh;
-  background-color: #F8F8FB;
+  background-color: var(--primary-colour-dark);
+  color: var(--primary-colour-darker);
 }
 
 ul {
@@ -16,4 +17,24 @@ ul {
 
 a {
   text-decoration: none;
+}
+
+:root {
+  --primary-colour-lighter: #eff7ff;
+  --primary-colour-ligth: #c8e4ff;
+  --primary-colour-base: #0481ff;
+  --primary-colour-dark: #003366;
+  --primary-colour-darker: #00162b;
+
+  --secondary-colour-lighter: #ffefef;
+  --secondary-colour-ligth: #ffc8c8;
+  --secondary-colour-base: #b30000;
+  --secondary-colour-dark: #660000;
+  --secondary-colour-darker: #1a0000;
+
+  --tertiary-colour-lighter: #efffff;
+  --tertiary-colour-ligth: #c8ffff;
+  --tertiary-colour-base: #00b3b3;
+  --tertiary-colour-dark: #006666;
+  --tertiary-colour-darker: #003333;
 }

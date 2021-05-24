@@ -1,6 +1,6 @@
 .container {
-  color: black;
   text-align: center;
+  color: var(--secondary-colour-lighter);
 }
 
 .wrapper {

@@ -21,7 +21,7 @@ export class BubbleComponent implements OnInit {
   @Input() data: Hierarchy[] = [];
   @Input() countries: CountryDictionary = {};
 
-  private svgDims = { width: 1000, height: 450 };
+  private svgDims = { width: 1000, height: 500 };
   private margin = { height: 10, width: 10 };
   private graphDims = {
     width: this.svgDims.width - this.margin.width,
@@ -60,6 +60,7 @@ export class BubbleComponent implements OnInit {
       .append('svg')
       .attr('width', this.svgDims.width)
       .attr('height', this.svgDims.height);
+
     this.graph = this.svg
       .append('g')
       .attr('width', this.graphDims.width)

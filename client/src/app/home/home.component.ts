@@ -25,8 +25,14 @@ export class HomeComponent implements OnInit {
   year = 2018;
 
   ngOnInit(): void {
-    this.countries = this.d3Service.countries;
+    this.getCountries();
     this.getData();
+  }
+
+  private getCountries(): void {
+    this.apiService.getCountries().subscribe((data) => {
+      this.countries = data;
+    });
   }
 
   getData(): void {
