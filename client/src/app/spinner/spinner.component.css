@@ -1,0 +1,23 @@
+.container {
+  background-color: var(--primary-colour-dark);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+  width: 15rem;
+  height: 15rem;
+  margin: 0 auto;
+  padding-top: 15rem;
+  border-radius: 50%;
+  border: 5px solid var(--secondary-colour-lighter);
+  border-top-color: rgba(33, 40, 71, 0.144);
+  animation: spinner 0.6s linear infinite;
+}

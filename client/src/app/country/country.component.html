@@ -1,6 +1,6 @@
 <div class="container">
   <h1 class="title">{{ country.name }}</h1>
-  <div class="top">
+  <div *ngIf="country.flag" class="top">
     <div class="left">
       <div class="flag__container">
         <img src="{{ country.flag }}" alt="='flag" class="flag" />
@@ -29,12 +29,16 @@
     </div>
     <!--
   -->
+
     <app-pie
-      *ngIf="pieData.length"
+      *ngIf="pieData.length; else spinner"
       [title]="pieTitle"
       [data]="pieData"
       [countries]="countries"
     ></app-pie>
+    <ng-template #spinner>
+      <app-spinner></app-spinner>
+    </ng-template>
   </div>
   <app-bar
     *ngIf="barData.length"

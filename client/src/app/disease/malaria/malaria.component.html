@@ -1,7 +1,7 @@
 <div class="container">
-  <h1 class="title">Malaria</h1>
+  <h1 class="title">{{ diseaseName }}</h1>
   <form class="form" [formGroup]="contactForm" (ngSubmit)="submit()">
-    <p *ngIf="years.length">
+    <div class="form__field" *ngIf="years.length">
       <select class="form__select" formControlName="year">
         <option [ngValue]="null" disabled>Select Year</option>
         <option *ngFor="let year of years" [ngValue]="year.id">
@@ -10,25 +10,39 @@
       </select>
 
       <button class="form__btn" type="submit">Submit</button>
-    </p>
+    </div>
   </form>
-  <div class="info">
+  <div *ngIf="pieData.length; else spinner" class="info">
     <div class="top">
-      <h2>Most infected countries:</h2>
+      <h2 class="top__title">Most infected countries:</h2>
       <ul class="top__list">
-        <li class="top__item" *ngFor="let country of hierarchyData">
-          <h4>{{ country.countryName }} :</h4>
+        <li
+          class="top__item"
+          *ngFor="let country of hierarchyData"
+          (click)="clickHandler(country.countryCode)"
+        >
+          <div class="flag__container">
+            <img
+              src="{{ countries[country.countryCode].flag }}"
+              alt="='flag"
+              class="flag"
+            />
+            <h4>{{ country.countryName }} :</h4>
+          </div>
           <p>{{ country.value }}</p>
         </li>
       </ul>
     </div>
+    <div class="pie">
+      <app-pie
+        *ngIf="pieData.length"
+        [title]="pieTitle"
+        [data]="pieData"
+        [countries]="countries"
+      ></app-pie>
+    </div>
   </div>
-  <div class="pie">
-    <app-pie
-      *ngIf="pieData.length"
-      [title]="pieTitle"
-      [data]="pieData"
-      [countries]="countries"
-    ></app-pie>
-  </div>
+  <ng-template #spinner>
+    <app-spinner></app-spinner>
+  </ng-template>
 </div>

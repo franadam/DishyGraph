@@ -63,9 +63,30 @@ export class D3Service {
   }
 
   formatToPieData(data: Disease[], type: string) {
-    const pieResult: Pie[] = [];
+    let pieResult: Pie[] = [];
     switch (type) {
       case 'region':
+        data.forEach((disease) => {
+          if (disease.place) {
+            //console.log(`disease.place`, disease.place);
+            //console.log(`this.countries`, this.countries);
+            const name =
+              this.countries[disease.place].regionName || disease.place;
+            const code =
+              this.countries[disease.place].regionCode || disease.place;
+            const parent = pieResult.find((r) => r.name === name);
+            if (!parent) {
+              pieResult.push({ name, code, value: disease.value });
+            } else {
+              pieResult = pieResult.filter((r) => r.name !== name);
+              pieResult.push({
+                ...parent,
+                value: parent.value + disease.value,
+              });
+            }
+          }
+        });
+        return pieResult;
         return data.reduce((acc, curr) => {
           const name = this.countries[curr.place].regionName || curr.place;
           const code = this.countries[curr.place].regionCode || curr.place;
@@ -83,6 +104,23 @@ export class D3Service {
           }
         }, pieResult);
       case 'disease':
+        data.forEach((disease) => {
+          if (disease.place) {
+            const name = disease.name;
+            const parent = pieResult.find((r) => r.name === name);
+
+            if (!parent) {
+              pieResult.push({ name, value: disease.value });
+            } else {
+              pieResult = pieResult.filter((r) => r.name !== name);
+              pieResult.push({
+                ...parent,
+                value: parent.value + disease.value,
+              });
+            }
+          }
+        });
+        return pieResult;
         return data.reduce((acc, curr) => {
           const name = curr.name;
           const parent = acc.find((r) => r.name === name);

@@ -14,6 +14,7 @@ import { MalariaComponent } from './disease/malaria/malaria.component';
 import { BarComponent } from './d3/bar/bar.component';
 import { CountryComponent } from './country/country.component';
 import { FooterComponent } from './footer/footer.component';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { FooterComponent } from './footer/footer.component';
     BarComponent,
     CountryComponent,
     FooterComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,

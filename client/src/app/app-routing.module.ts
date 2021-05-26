@@ -7,7 +7,7 @@ import { HomeComponent } from './home/home.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'country/:code', component: CountryComponent },
-  { path: 'disease/malaria', component: MalariaComponent },
+  { path: 'disease/:name', component: MalariaComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 
@@ -15,5 +15,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-
 export class AppRoutingModule {}
