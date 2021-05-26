@@ -1,6 +1,11 @@
 <div class="container">
   <h1 class="title">{{ diseaseName }}</h1>
-  <form class="form" [formGroup]="contactForm" (ngSubmit)="submit()">
+  <form
+    *ngIf="pieData.length"
+    class="form"
+    [formGroup]="contactForm"
+    (ngSubmit)="submit()"
+  >
     <div class="form__field" *ngIf="years.length">
       <select class="form__select" formControlName="year">
         <option [ngValue]="null" disabled>Select Year</option>

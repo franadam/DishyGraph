@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChange } from '@angular/core';
 
 import { ApiClientService } from 'src/app/api-client.service';
 import { D3Service } from 'src/app/d3.service';
@@ -18,8 +18,6 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./malaria.component.css'],
 })
 export class MalariaComponent implements OnInit {
-  year: number = 2009;
-
   constructor(
     private apiService: ApiClientService,
     private d3Service: D3Service,
@@ -27,33 +25,31 @@ export class MalariaComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.year = 2016; //this.years[this.contactForm.value.year].year;
+    //this.year = 2016; //this.years[this.contactForm.value.year].year;
   }
 
   diseaseName: string = '';
   contactForm!: FormGroup;
   years: { id: number; year: number }[] = [];
+  year: { id: number; year: number } = { id: 9, year: 2009 };
   $data: Observable<Disease[]> = new BehaviorSubject([]);
   data: Disease[] = [];
   dataFull: Disease[] = [];
   countries: CountryDictionary = {};
   pieData: graphType.Pie[] = [];
   hierarchyData: graphType.Hierarchy[] = [];
-  pieTitle = `Estimated case of Malaria by region in ${this.year}`;
+  pieTitle = `Estimated case of Malaria by region in ${this.year.year}`;
 
   ngOnInit(): void {
     this.diseaseName = `${this.route.snapshot.paramMap.get('name')}`;
     this.getMalaria();
     //this.getDisease();
     this.getCountries();
-    console.log(`this.data`, this.data);
-    console.log(`this.diseaseName`, this.diseaseName);
-    //this.countries = this.d3Service.countries;
-    console.log(`this.countries`, this.countries);
-    this.contactForm = this.formBuilder.group({
-      year: [9],
-    });
   }
+
+  //ngOnChanges(change: SimpleChange) {
+  //  this.pieTitle = `Estimated case of Malaria by region in ${this.year.year}`;
+  //}
 
   private getCountries(): void {
     this.apiService.getCountries().subscribe((data) => {
@@ -72,11 +68,14 @@ export class MalariaComponent implements OnInit {
   submit() {
     console.log('Form Submitted');
     console.log('contactForm year', this.contactForm.value.year);
-    this.year = this.years[this.contactForm.value.year].year;
+    this.year = {
+      id: this.contactForm.value.year,
+      year: this.years[this.contactForm.value.year].year,
+    };
     console.log(`this.year`, this.year);
-    this.data = this.dataFull.filter((d) => d.time === this.year);
+    this.data = this.dataFull.filter((d) => d.time === this.year.year);
     this.pieData = this.d3Service.formatToPieData(this.data, 'region');
-    this.pieTitle = `Estimated case of Malaria by region in ${this.year}`;
+    this.pieTitle = `Estimated case of Malaria by region in ${this.year.year}`;
     console.log(`this.pieData`, this.pieData);
     const hierarchyData = this.d3Service.formatToHierarchyData(
       this.data,
@@ -152,7 +151,7 @@ export class MalariaComponent implements OnInit {
       id: i,
       year: d,
     }));
-    this.data = data.filter((d) => d.time === this.year);
+    this.data = data.filter((d) => d.time === this.year.year);
     this.pieData = this.d3Service.formatToPieData(this.data, 'region');
     console.log(`this.pieData`, this.pieData);
     const hierarchyData = this.d3Service.formatToHierarchyData(
@@ -173,8 +172,13 @@ export class MalariaComponent implements OnInit {
           year: d,
         })
       );
-      console.log(`this.years`, this.years);
-      this.data = data.filter((d) => d.time === this.year);
+      this.year = this.years.slice(-1)[0];
+      this.contactForm = this.formBuilder.group({
+        year: [this.year.id],
+      });
+      console.log(`getMalaria >>> this.year`, this.year);
+      this.pieTitle = `Estimated case of Malaria by region in ${this.year.year}`;
+      this.data = data.filter((d) => d.time === this.year.year);
       this.pieData = this.d3Service.formatToPieData(this.data, 'region');
       console.log(`this.pieData`, this.pieData);
       const hierarchyData = this.d3Service.formatToHierarchyData(

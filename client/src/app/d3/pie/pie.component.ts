@@ -172,7 +172,7 @@ export class PieComponent implements OnInit {
       .value((d) => d.value);
 
     const angles = this.pieGenerator(
-      this.data //.map((a) => ({ ...a, value: this.yScale(a.value) }))
+      this.data.map((a) => ({ ...a, value: this.yScale(a.value) }))
     );
 
     this.createColors();
