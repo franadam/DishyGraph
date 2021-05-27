@@ -1,17 +1,9 @@
-import {
-  Component,
-  Directive,
-  Input,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import * as d3 from 'd3';
 
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import * as graphType from 'src/app/graphData.interface';
-import { Disease } from 'src/app/endpoint.interface';
 import CountryDictionary from 'src/app/country.interface';
-import { BaseType, Pie, PieArcDatum } from 'd3';
 
 @Component({
   selector: 'app-pie',
@@ -23,7 +15,7 @@ export class PieComponent implements OnInit {
 
   @Input() data: graphType.Pie[] = [];
   @Input() countries!: CountryDictionary;
-  @Input() title: string = '';
+  @Input() title = '';
 
   private svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any> =
     d3.select('g');
@@ -42,47 +34,32 @@ export class PieComponent implements OnInit {
 
   private pieGenerator: d3.Pie<any, any> = d3.pie();
   private arcPath: any;
-  private paths: any; //d3.Selection<d3.BaseType, unknown, SVGGElement, unknown>;
-  private legends: any; //: d3.Selection<d3.BaseType, graphType.Pie, SVGSVGElement, unknown> =  d3.select('g');
+  private paths: any; // d3.Selection<d3.BaseType, unknown, SVGGElement, unknown>;
+  private legends: any; // : d3.Selection<d3.BaseType, graphType.Pie, SVGSVGElement, unknown> =  d3.select('g');
   private dims = { height: 200, width: 400, radius: 100 };
   private center = { x: this.dims.width / 2 + 5, y: this.dims.height / 2 + 5 };
   private margin = { height: 100, width: 100 };
 
   private dataDictionary: { [key: string]: graphType.Pie } = {};
-  //@Directive({
-  //  selector: '[data, title]',
-  //})
 
   ngOnInit(): void {
-    // console.log(`pieData`, this.data);
-
     this.getDictionary();
     this.createGraph();
     this.updateChart();
   }
 
-  private getDictionary(): void {
-    this.data.forEach((d) => {
-      if (d.code) this.dataDictionary[d.code] = d;
-    });
-    console.log(`this.dataDictionary`, this.dataDictionary);
-  }
-  ngOnChanges(changes: SimpleChanges) {
-    // changes.prop contains the old and the new value...
-    //let change1 = changes['data'];
-    //let change2 = changes['title'];
-    console.log(`changes`, changes);
-    //this.data = change1.currentValue;
-    console.log(`ngOnChanges this.data`, this.data);
-    //console.log(`change previousValue`, change1.previousValue);
-    //console.log(`change1 currentValue`, change1.currentValue);
-    //console.log(`change1 firstChange`, change1.firstChange);
-    //
-    //console.log(`title previousValue`, change2.previousValue);
-    //console.log(`title currentValue`, change2.currentValue);
-    //this.paths.exit().remove();
+  ngOnChanges(): void {
     this.getDictionary();
     this.updateChart();
+  }
+
+  private getDictionary(): void {
+    this.data.forEach((d) => {
+      if (d.code) {
+        this.dataDictionary[d.code] = d;
+      }
+    });
+    console.log(`this.dataDictionary`, this.dataDictionary);
   }
 
   private createGraph(): void {
@@ -94,7 +71,10 @@ export class PieComponent implements OnInit {
 
     this.graph = this.svg
       .append('g')
-      .attr('transform', `translate(${this.center.x}, ${this.center.y})`);
+      .attr(
+        'transform',
+        `translate(${this.center.x - this.margin.width / 2}, ${this.center.y})`
+      );
 
     this.pieGenerator = d3
       .pie<any>()
@@ -122,8 +102,11 @@ export class PieComponent implements OnInit {
           enter
             .append('g')
             .attr('class', 'legend')
-            .attr('transform', `translate(${this.dims.width - 180}, -50)`),
-        (update: any) => update, //.attr('fill', (d: any) => this.colors(d.data.name)),
+            .attr(
+              'transform',
+              `translate(${this.dims.width - 2 * this.margin.width}, -50)`
+            ),
+        (update: any) => update,
         (exit: any) => exit.remove()
       );
 
@@ -134,7 +117,7 @@ export class PieComponent implements OnInit {
       .data(this.data)
       .join(
         (enter: any) => enter.append('circle').attr('class', 'dot'),
-        (update: any) => update, //.attr('fill', (d: any) => this.colors(d.data.name)),
+        (update: any) => update,
         (exit: any) => exit.remove()
       )
       .attr('cx', 100)
@@ -147,7 +130,7 @@ export class PieComponent implements OnInit {
       .data(this.data)
       .join(
         (enter: any) => enter.append('text').attr('class', 'label'),
-        (update: any) => update, //.attr('fill', (d: any) => this.colors(d.data.name)),
+        (update: any) => update,
         (exit: any) => exit.remove()
       )
       .attr('x', 120)
@@ -157,11 +140,12 @@ export class PieComponent implements OnInit {
   }
 
   private createScale(): void {
-    let y_dom: number[] = [];
-    const [y_min, y_max] = d3.extent(this.data, (d: graphType.Pie) => d.value);
-    console.log(`[y_min, y_max] `, [y_min, y_max]);
-    if (y_min !== undefined && y_max !== undefined) y_dom = [y_min, y_max];
-    this.yScale = d3.scaleSqrt().domain(y_dom);
+    let yDom: number[] = [];
+    const [yMin, yMax] = d3.extent(this.data, (d: graphType.Pie) => d.value);
+    if (yMin !== undefined && yMax !== undefined) {
+      yDom = [yMin, yMax];
+    }
+    this.yScale = d3.scaleSqrt().domain(yDom);
   }
 
   private updateChart(): void {
@@ -180,7 +164,6 @@ export class PieComponent implements OnInit {
     this.createLengend();
     const paths: d3.Selection<d3.BaseType, unknown, SVGGElement, unknown> =
       this.graph.selectAll('.piece');
-    //d3.Selection<d3.BaseType, unknown, SVGGElement, unknown>
     this.paths = paths;
 
     this.paths.exit().remove();
@@ -190,10 +173,9 @@ export class PieComponent implements OnInit {
       .data(angles)
       .join(
         (enter: any) => enter.append('path').attr('class', 'piece'),
-        (update: any) => update, //.attr('fill', (d: any) => this.colors(d.data.name)),
+        (update: any) => update,
         (exit: any) => exit.remove()
       )
-      //.attr('d', this.arcPath)
       .attr('id', (d: any) => d.data.disease)
       .attr('fill', (d: any) => this.colors(d.data.name))
       .attr('fill-opacity', 0.5)
@@ -201,7 +183,7 @@ export class PieComponent implements OnInit {
       .style('stroke-width', 2)
       .transition()
       .duration(750)
-      .attrTween('d', function (newValues: any, i: any) {
+      .attrTween('d', function(newValues: any, i: any) {
         return vm.arcTween(newValues, i, vm.paths);
       });
 
@@ -234,28 +216,12 @@ export class PieComponent implements OnInit {
         `;
     this.paths.append('title').html((d: any) => clip(d));
 
-    //function mouseOverHandler (event: any, data: any) {
-    //  d3.select(this)
-    //    .transition('ChangeFill')
-    //    .duration(300)
-    //    .attr('fill', '#fff');
-    //};
-    //
-    //function mouseOutHandler (event:any, data: any){
-    //  d3.select(this)
-    //    .transition('ChangeFill')
-    //    .duration(300)
-    //    .attr('fill', this.colors(data.data.disease));
-    //};
-    //
     const clickHandler = (event: any, data: any) => {
       const countryCode = data.data.countryCode;
       this.router.navigateByUrl(`/disease/malaria`);
     };
 
     this.graph.selectAll('.piece').on('click', clickHandler);
-    //.on('mouseover', mouseOverHandler)
-    //.on('mouseout', mouseOutHandler)
   }
 
   private arcTween = (newValues: any, i: any, slice: any) => {
@@ -265,104 +231,5 @@ export class PieComponent implements OnInit {
     return (t: any) => {
       return this.arcPath(interpolation(t));
     };
-  };
-  private drawChart(): void {
-    // Compute the position of each group on the pie:
-
-    const angles = this.pieGenerator(
-      this.data.map((a) => ({ ...a, value: this.yScale(a.value) }))
-    );
-    const paths = this.graph.selectAll('.piece').data(angles);
-
-    // Build the pie chart
-    //paths
-    //  .append('path')
-    //  .attr('d', this.arcPath)
-    //  .attr('id', (d: any) => d.data.disease)
-    //  .attr('fill', (d: any) => this.colors(d.data.name))
-    //  .attr('fill-opacity', 0.5)
-    //  .attr('stroke', (d: any) => this.colors(d.data.name))
-    //  .style('stroke-width', 2);
-
-    // Add labels
-    const labelLocation = d3
-      .arc()
-      .innerRadius(100)
-      .outerRadius(this.dims.radius);
-
-    paths.exit().remove();
-
-    paths
-      .selectAll('.pieces')
-      .data(angles)
-      .join(
-        (enter) => enter.append('path'),
-        (update) => update.attr('fill', (d: any) => this.colors(d.data.name)),
-        (exit) => exit.remove()
-      )
-      .append('text')
-      .attr('fill', (d: any) => this.colors(d.data.name));
-    //.text((d: any) => d.data.name)
-    //.attr('transform', (d: any) => `translate(${labelLocation.centroid(d)})`)
-    //.style('text-anchor', 'middle')
-    //.attr('fill', 'black')
-    //.style('font-size', 15);
-
-    paths
-      .append('clipPath')
-      .attr('id', (d: any) => 'clip_' + d.data.disease)
-      .append('use')
-      .attr('xlink:href', (d: any) => d.data.disease);
-
-    paths
-      .append('text')
-      .attr('clip-path', (d: any) => 'clip_' + d.data.disease)
-      .selectAll('tspan')
-      .data((d: any) => d.data)
-      .join('tspan')
-      .attr('x', 0)
-      .attr(
-        'y',
-        (d: any, i: any, nodes: any) => `${i - nodes.length / 2 + 0.8}em`
-      )
-      .text((d: any) => d.countryCode)
-      .attr('tt', (d: any) => d.countryCode);
-
-    const clip = (d: any) => `
-        <h4 class="clip__title">${d.data.name}</h4>
-        <p class="clip__value">${
-          this.dataDictionary[d.data.code].value
-        } cases</p>
-        `;
-    paths.append('title').html((d: any) => {
-      console.log(
-        `this.dataDictionary[d.data.code].value`,
-        //this.dataDictionary[].value
-        d.data.code
-      );
-      return clip(d);
-    });
-
-    //function mouseOverHandler (event: any, data: any) {
-    //  d3.select(this)
-    //    .transition('ChangeFill')
-    //    .duration(300)
-    //    .attr('fill', '#fff');
-    //};
-    //
-    //function mouseOutHandler (event:any, data: any){
-    //  d3.select(this)
-    //    .transition('ChangeFill')
-    //    .duration(300)
-    //    .attr('fill', this.colors(data.data.disease));
-    //};
-    //
-    const clickHandler = (event: any, data: any) => {
-      const countryCode = data.data.countryCode;
-      this.router.navigateByUrl(`/disease/malaria`);
-    };
-    this.graph.selectAll('path').on('click', clickHandler);
-    //.on('mouseover', mouseOverHandler)
-    //.on('mouseout', mouseOutHandler)
   }
 }

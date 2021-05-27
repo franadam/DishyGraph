@@ -7,6 +7,6 @@ interface Disease {
   time: number;
 }
 
-export type DiseaseArray = Disease[] 
+export type DiseaseArray = Disease[];
 
 export default Disease;

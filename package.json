@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon server/index.js",
-    "lint": "cd client && ng lint",
+    "lint": "npx eslint --fix . && cd client && npm run lint",
     "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build:prod --prefix client"

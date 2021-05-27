@@ -1,6 +1,6 @@
-interface dimension {
+interface Dimension {
   width: number;
   height: number;
 }
 
-export default dimension;
+export default Dimension;

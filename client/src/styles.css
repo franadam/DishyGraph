@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Quicksand&family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Pattaya&family=Quicksand&family=Roboto&display=swap");
 
 * {
   box-sizing: border-box;
@@ -27,6 +27,7 @@ h1 {
     "Helvetica Neue", sans-serif;
 }
 
+h2,
 h3 {
   font-family: "Roboto", Oxygen, Ubuntu, Cantarell, "Open Sans",
     "Helvetica Neue", sans-serif;

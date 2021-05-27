@@ -29,6 +29,10 @@
   margin-right: 0.5rem;
 }
 
+.logo__title {
+  font-family: "Pattaya", sans-serif;
+}
+
 .search__container {
   background-color: rgb(31, 31, 31);
   padding: 0.6rem;

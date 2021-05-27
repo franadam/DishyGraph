@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 
 import CountryDictionary from 'src/app/country.interface';
-import { Bar} from 'src/app/graphData.interface';
+import { Bar } from 'src/app/graphData.interface';
 
 @Component({
   selector: 'app-bar',
@@ -14,7 +14,7 @@ export class BarComponent implements OnInit {
 
   @Input() countries: CountryDictionary = {};
   @Input() data: Bar[] | any = [];
-  @Input() title: string = '';
+  @Input() title = '';
 
   private svgDims = { width: 900, height: 500 };
   private margin = { height: 50, width: 50 };
@@ -24,34 +24,18 @@ export class BarComponent implements OnInit {
   };
   private diseases: string[] = [];
   private transition = 1500;
-  private svg: d3.Selection<
-    SVGSVGElement,
-    unknown,
-    HTMLElement,
-    any
-  > = d3.select('g');
+  private svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any> =
+    d3.select('g');
   private yScale: d3.ScaleLinear<number, number, never> = d3.scaleLinear();
   private xScale0: d3.ScaleBand<string> = d3.scaleBand();
   private xScale1: d3.ScaleBand<string> = d3.scaleBand();
-  private graph: d3.Selection<
-    SVGGElement,
-    unknown,
-    HTMLElement,
-    any
-  > = d3.select('g');
+  private graph: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
+    d3.select('g');
   private colors: d3.ScaleOrdinal<string, string, never> = d3.scaleOrdinal();
-  private xAxisGroup: d3.Selection<
-    SVGGElement,
-    unknown,
-    HTMLElement,
-    any
-  > = d3.select('g');
-  private yAxisGroup: d3.Selection<
-    SVGGElement,
-    unknown,
-    HTMLElement,
-    any
-  > = d3.select('g');
+  private xAxisGroup: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
+    d3.select('g');
+  private yAxisGroup: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
+    d3.select('g');
   private yAxis: d3.Axis<d3.NumberValue> = d3.axisLeft(this.yScale);
   private xAxis: d3.Axis<string> = d3.axisBottom(this.xScale0);
   private legends!: d3.Selection<
@@ -104,15 +88,12 @@ export class BarComponent implements OnInit {
       .padding(0.5)
       .domain(this.diseases);
 
-    const y_dom = [
+    const yDom = [
       1,
       d3.max(this.data, (d: Bar) => d3.max(this.diseases, (key) => d[key])) ||
         45000,
     ];
-    this.yScale = d3
-      .scaleSqrt()
-      .range([this.graphDims.height, 1])
-      .domain(y_dom);
+    this.yScale = d3.scaleSqrt().range([this.graphDims.height, 1]).domain(yDom);
   }
 
   private createAxis(): void {
@@ -122,12 +103,15 @@ export class BarComponent implements OnInit {
 
     this.xAxis = d3.axisBottom(this.xScale0);
     this.yAxis = d3.axisLeft(this.yScale).ticks(null, 's');
-    //.tickFormat((d) => d + ' cases')
   }
 
   private createLegend(): void {
-    this.legends = this.svg.append('g')
-      .attr('transform', `translate(${this.graphDims.width - this.margin.width},0)`)
+    this.legends = this.svg
+      .append('g')
+      .attr(
+        'transform',
+        `translate(${this.graphDims.width - this.margin.width},0)`
+      )
       .attr('font-family', 'sans-serif')
       .selectAll('.legend')
       .data(this.colors.domain().slice().reverse())
@@ -179,7 +163,7 @@ export class BarComponent implements OnInit {
       .attr('width', this.xScale1.bandwidth())
       .attr('height', (d) => this.yScale(1) - this.yScale(d.value || 1));
 
-      this.graph.call(() => this.legends)
+    this.graph.call(() => this.legends);
     this.xAxisGroup
       .call(this.xAxis)
       .attr('transform', `translate(0, ${this.graphDims.height})`)

@@ -5,7 +5,6 @@ import * as d3 from 'd3';
 import CountryDictionary from './country.interface';
 import Disease from './disease.interface';
 import { Hierarchy, Pie } from './graphData.interface';
-import dimension from './d3.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -23,22 +22,7 @@ export class D3Service {
     });
   }
 
-  createSvg(svgDims: dimension, graphDims: dimension, margin: dimension) {
-    const svg = d3
-      .select('figure#bubble')
-      .append('svg')
-      .attr('width', svgDims.width)
-      .attr('height', svgDims.height);
-    const graph = svg
-      .append('g')
-      .attr('width', graphDims.width)
-      .attr('height', graphDims.height)
-      .attr('transform', `translate(${margin.width},  ${margin.height})`);
-
-    return [svg, graph];
-  }
-
-  formatToHierarchyData(data: Disease[], disease: string) {
+  formatToHierarchyData(data: Disease[], disease: string): Hierarchy[] {
     console.log(`d3service`, data);
     const res: Hierarchy[] = [];
     data.forEach((curr) => {
@@ -62,14 +46,12 @@ export class D3Service {
     return res;
   }
 
-  formatToPieData(data: Disease[], type: string) {
+  formatToPieData(data: Disease[], type: string): Pie[] {
     let pieResult: Pie[] = [];
     switch (type) {
       case 'region':
         data.forEach((disease) => {
           if (disease.place) {
-            //console.log(`disease.place`, disease.place);
-            //console.log(`this.countries`, this.countries);
             const name =
               this.countries[disease.place].regionName || disease.place;
             const code =

@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { ApiClientService } from '../api-client.service';
 import { D3Service } from '../d3.service';
 
-import * as endpointType from 'src/app/endpoint.interface';
 import * as graphType from 'src/app/graphData.interface';
 import CountryDictionary from '../country.interface';
 import { forkJoin, Observable } from 'rxjs';
@@ -45,7 +44,7 @@ export class HomeComponent implements OnInit {
     const $poliomyelitis = this.getPoliomyelitis();
     const hierarchyData: graphType.Hierarchy[] = [];
     forkJoin(
-      //$malaria,
+      // $malaria,
       [$measles, $cholera, $tuberculosis, $rubella, $diphtheria, $poliomyelitis]
     ).subscribe((data) => {
       this.diseases = hierarchyData.concat(...data);

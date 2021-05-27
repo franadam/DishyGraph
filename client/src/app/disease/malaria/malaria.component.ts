@@ -1,10 +1,9 @@
-import { Component, OnInit, SimpleChange } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { ApiClientService } from 'src/app/api-client.service';
 import { D3Service } from 'src/app/d3.service';
 
 import * as graphType from 'src/app/graphData.interface';
-//import * as endpointType from 'src/app/endpoint.interface';
 import CountryDictionary, { Country } from 'src/app/country.interface';
 import Disease from 'src/app/disease.interface';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -24,11 +23,9 @@ export class MalariaComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute
-  ) {
-    //this.year = 2016; //this.years[this.contactForm.value.year].year;
-  }
+  ) {}
 
-  diseaseName: string = '';
+  diseaseName = '';
   contactForm!: FormGroup;
   years: { id: number; year: number }[] = [];
   year: { id: number; year: number } = { id: 9, year: 2009 };
@@ -43,40 +40,28 @@ export class MalariaComponent implements OnInit {
   ngOnInit(): void {
     this.diseaseName = `${this.route.snapshot.paramMap.get('name')}`;
     this.getMalaria();
-    //this.getDisease();
+    // this.getDisease();
     this.getCountries();
   }
-
-  //ngOnChanges(change: SimpleChange) {
-  //  this.pieTitle = `Estimated case of Malaria by region in ${this.year.year}`;
-  //}
 
   private getCountries(): void {
     this.apiService.getCountries().subscribe((data) => {
       this.countries = data;
-      //this.country = this.countries[this.countryCode];
-      ////console.log(`this.countryCode`, this.countryCode);
-      //console.log(`this.countries`, this.countries);
-      //console.log(`this.country`, this.country);
     });
   }
 
   clickHandler = (countryCode: string) => {
     this.router.navigateByUrl(`/country/${countryCode}`);
-  };
+  }
 
-  submit() {
-    console.log('Form Submitted');
-    console.log('contactForm year', this.contactForm.value.year);
+  submit(): void {
     this.year = {
       id: this.contactForm.value.year,
       year: this.years[this.contactForm.value.year].year,
     };
-    console.log(`this.year`, this.year);
     this.data = this.dataFull.filter((d) => d.time === this.year.year);
     this.pieData = this.d3Service.formatToPieData(this.data, 'region');
     this.pieTitle = `Estimated case of Malaria by region in ${this.year.year}`;
-    console.log(`this.pieData`, this.pieData);
     const hierarchyData = this.d3Service.formatToHierarchyData(
       this.data,
       'malaria'
@@ -85,7 +70,6 @@ export class MalariaComponent implements OnInit {
       .formatToHierarchyData(this.data, 'malaria')
       .sort((a, b) => b.value - a.value)
       .slice(0, 3);
-    console.log(this.year);
   }
 
   getCholera(): Observable<graphType.Hierarchy[]> {
@@ -101,7 +85,6 @@ export class MalariaComponent implements OnInit {
 
   getDisease(): void {
     this.diseaseName = `${this.route.snapshot.paramMap.get('name')}`;
-    console.log(' this.diseaseName :>> ', this.diseaseName);
     switch (this.diseaseName) {
       case 'malaria':
         this.apiService
@@ -146,14 +129,12 @@ export class MalariaComponent implements OnInit {
 
   private diseaseHelper = (data: Disease[]) => {
     this.dataFull = data;
-    console.log(`[diseaseHelper] data`, data);
     this.years = [...new Set(this.dataFull.map((d) => d.time))].map((d, i) => ({
       id: i,
       year: d,
     }));
     this.data = data.filter((d) => d.time === this.year.year);
     this.pieData = this.d3Service.formatToPieData(this.data, 'region');
-    console.log(`this.pieData`, this.pieData);
     const hierarchyData = this.d3Service.formatToHierarchyData(
       this.data,
       this.diseaseName
@@ -161,7 +142,7 @@ export class MalariaComponent implements OnInit {
     this.hierarchyData = hierarchyData
       .sort((a, b) => b.value - a.value)
       .slice(0, 3);
-  };
+  }
 
   getMalaria(): void {
     this.apiService.getMalaria().subscribe((data) => {
@@ -176,11 +157,9 @@ export class MalariaComponent implements OnInit {
       this.contactForm = this.formBuilder.group({
         year: [this.year.id],
       });
-      console.log(`getMalaria >>> this.year`, this.year);
       this.pieTitle = `Estimated case of Malaria by region in ${this.year.year}`;
       this.data = data.filter((d) => d.time === this.year.year);
       this.pieData = this.d3Service.formatToPieData(this.data, 'region');
-      console.log(`this.pieData`, this.pieData);
       const hierarchyData = this.d3Service.formatToHierarchyData(
         this.data,
         'malaria'

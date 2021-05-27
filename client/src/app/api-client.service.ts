@@ -21,14 +21,17 @@ export class ApiClientService {
     }),
   };
 
-  private handleError<T>(operation = 'operation', result?: T) {
+  private handleError<T>(
+    operation = 'operation',
+    result?: T
+  ): (error: any) => Observable<T> {
     return (error: any): Observable<T> => {
       console.error(error);
       return of(result as T);
     };
   }
 
-  toDiseaseType(data: endpointType.Disease[], name: string) {
+  toDiseaseType(data: endpointType.Disease[], name: string): Disease[] {
     return data.map(
       ({ NumericValue, SpatialDimType, SpatialDim, TimeDimType, TimeDim }) => ({
         name,

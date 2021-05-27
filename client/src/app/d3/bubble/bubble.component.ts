@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import * as d3 from 'd3';
 
 import CountryDictionary from 'src/app/country.interface';
@@ -12,11 +11,7 @@ import { Hierarchy } from 'src/app/graphData.interface';
   styleUrls: ['./bubble.component.css'],
 })
 export class BubbleComponent implements OnInit {
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private location: Location
-  ) {}
+  constructor(private router: Router) {}
 
   @Input() data: Hierarchy[] = [];
   @Input() countries: CountryDictionary = {};
@@ -35,7 +30,7 @@ export class BubbleComponent implements OnInit {
   private graph: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
     d3.select('g');
   private colors!: d3.ScaleOrdinal<string, string, never>;
-  private root!: d3.HierarchyCircularNode<unknown>; // = d3.hierarchy(this.data);
+  private root!: d3.HierarchyCircularNode<unknown>;
   private legends: d3.Selection<SVGGElement, unknown, HTMLElement, any> =
     d3.select('g');
   private transition = 3000;
@@ -91,7 +86,7 @@ export class BubbleComponent implements OnInit {
       ((i % this.grid.row) + 0.5) * this.grid.width,
       (Math.floor(i / this.grid.row) + 0.5) * this.grid.width,
     ];
-  };
+  }
 
   private createScale(): void {
     this.rScale = d3
@@ -195,14 +190,11 @@ export class BubbleComponent implements OnInit {
     countries.append('title').html((d: any) => clip(d));
 
     // add events
-
     const clickHandler = (event: any, data: any) => {
       const countryCode = data.data.countryCode;
       this.router.navigateByUrl(`/country/${countryCode}`);
     };
 
     this.graph.selectAll('circle').on('click', clickHandler);
-    //.on('mouseover', mouseOverHandler)
-    //.on('mouseout', mouseOutHandler)
   }
 }
