@@ -79,6 +79,8 @@
 
 .form__btn {
   background-color: blueviolet;
+  color: white;
+  font-weight: bold;
   border: none;
   border-radius: 5px;
   padding: 1rem;
@@ -89,6 +91,7 @@
 
 .form__btn:hover {
   cursor: pointer;
+  color: var(--primary-colour-darkers);
   box-shadow: 2px 2px 5px rgba(0, 0, 0);
-  color: white;
+  background-color: rgb(207, 155, 255);
 }
