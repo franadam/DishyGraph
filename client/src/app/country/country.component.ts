@@ -42,8 +42,8 @@ export class CountryComponent implements OnInit {
   pieData: Pie[] = [];
   barData: Bar[] = [];
   year = 2018;
-  pieTitle = `Estimated case of infectious diseas in ${this.year}`;
-  barTitle = `Estimated case of infectious diseas by years`;
+  pieTitle = `Estimated case of infectious disease in ${this.year}`;
+  barTitle = `Estimated case of infectious disease by years`;
   periodOfTime = 20;
   faUser = faUser;
   faMapMarkerAlt = faMapMarkerAlt;
